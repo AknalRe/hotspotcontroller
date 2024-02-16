@@ -5,13 +5,13 @@
 
     function getUcapan(){
         if(currentTime >= 5 && currentTime < 11) {
-            return "Selamat Pagi"
+            return "Pagi"
         } else if (currentTime >= 11 && currentTime < 15) {
-            return "Selamat Siang"
+            return "Siang"
         } else if (currentTime >= 15 && currentTime < 16) {
-            return "Selamat Sore"
+            return "Sore"
         } else {
-            return "Selamat Malam"
+            return "Malam"
         }
     }
     document.addEventListener('DOMContentLoaded', function(){
@@ -20,6 +20,31 @@
         // console.log(name)
 
         const ucapan = getUcapan();
-        usernameElement.innerText = `${ucapan} ${name}, Semangat Bekerja!`;
+        usernameElement.innerText = `${ucapan} ${name}, Semangat!`;
     });
+    function logout() {
+        const formData = {};
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+            if (data.success) {
+                showNotification(data.success, data.message);
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 5000);
+            } else {
+                showNotification(data.success, data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 </script>

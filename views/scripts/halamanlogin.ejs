@@ -48,7 +48,7 @@ document.getElementById('login-post').addEventListener('submit', function (event
                 window.location.href = '/';
             }, 5000);
         } else {
-            notiflog(data.success, data.message);
+            showInfo(data.success, data.message);
         }
     })
     .catch(error => {
@@ -69,6 +69,11 @@ function showInfo(success, message) {
 
     setTimeout(function() {
         loggerInfo.classList.remove('show'); // Hapus kelas show setelah 5 detik
+        if (success) {
+            loggerInfo.classList.remove('success');
+        } else {
+            loggerInfo.classList.remove('error');
+        }
     }, 5000); // 5000 milidetik = 5 detik
 }
 </script>

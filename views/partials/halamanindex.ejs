@@ -6,8 +6,50 @@
         <h4 id="ucapan"></h4>
         <div class="logout-button">
             <button id="logoutButton" onclick="logout()">
-                <i class="fa fa-power-off" style="font-size:38px;color:red"></i>
+                <i class="fa fa-power-off" style="font-size:30px;color:red"></i>
             </button>
         </div>
     </div>
+    <% if (mikrotikstatus === false ) { %>
+        <div class="mikrotik-status">
+            <h5>Mikrotik Terputus, Hubungi Admin <a href="https://wa.me/6285155431301">085155431301</a></h5>
+        </div>
+    <% } %>
+    <% if (role == "Administrator") { %>
+        <div class="tambah-hotspot" id="tambah-hotspot">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+            </div>
+            <div class="form-container">
+                <h6>Tambah Akun</h6>
+                <form id="tambahAkunForm" action="/tambahakunhotspot" method="POST">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-grup">
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="text" class="form-control" id="password" name="password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="jenisAkun">Jenis Akun:</label>
+                                <select class="form-control" id="jenisAkun" name="jenisAkun" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="btn-tambah-hotspot">
+                            <button type="submit" class="btn btn-primary btn-tambah-akun">Tambah Akun</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <% } else { %>
+    <% } %>
 </div>

@@ -18,7 +18,9 @@ router.post('/test', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    const ip = req ? req.ip : 'unknown';
+    const ip = req.headers['x-forwarded-for']
+    ? `${req.headers['x-forwarded-for']}`
+    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`
     try {
         const { username, password } = req.body;
 
@@ -37,15 +39,15 @@ router.post('/login', async (req, res) => {
             req.session.role = user.role;
             req.session.name = user.name;
             // console.log(req.session);
-            logg(true, `Berhasil login username : ${username} - IP : ${req.ip}`)
+            logg(true, `Berhasil login username : ${username} - IP : ${ip}`)
             res.json({ success: true, message: 'Login berhasil!' });
         } else {
-            logg(false, `Gagal login username : ${username} - IP : ${req.ip}`)
+            logg(false, `Gagal login username : ${username} - IP : ${ip}`)
             res.json({ success: false, message: 'Login gagal. Periksa username dan password.' });
         }
     } catch (error) {
         console.error(error);
-        logg(false, `Terjadi kesalahan pada server. : ${error} - IP : ${req.ip}`)
+        logg(false, `Terjadi kesalahan pada server. : ${error} - IP : ${ip}`)
         res.json({ success: false, message: 'Terjadi kesalahan pada server.' });
     }
 });

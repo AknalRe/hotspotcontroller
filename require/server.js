@@ -25,7 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
   secret: 'a01wOUAH8tWGte9GSVA33rGnXjyNnfGH', // Ganti dengan kunci rahasia yang kuat
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new session.MemoryStore(),
+  cookie: { maxAge: 180000 }
 }));
 
 app.use((req, res, next) => {
@@ -48,7 +50,7 @@ app.use((req, res, next) => {
             : `${method} - ${req.url}`;
         const ip = req.headers['x-forwarded-for']
           ? `${req.headers['x-forwarded-for']}`
-          : `${req.ip == "::1" ? "127.0.0.1" : req.ip }`
+          : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`
         logg(true, `${ip} - ${logMessage}`);
     }
   } catch (err) {
@@ -58,6 +60,28 @@ app.use((req, res, next) => {
     logg(false, `${ip} - ${method} - ${req.url}`);
   }
 
+  next();
+});
+
+app.use((req, res, next) => {
+  if (req.session && req.session.lastAccess) {
+      const now = new Date();
+      const elapsedTime = now - req.session.lastAccess;
+      const maxAge = req.session.cookie.maxAge;
+
+      if (elapsedTime > maxAge) {
+          // Sesi telah kedaluwarsa, logout pengguna
+          req.session.destroy((err) => {
+              if (err) {
+                  console.error('Error destroying session:', err);
+              } else {
+                  console.log('Session has been destroyed due to inactivity');
+              }
+          });
+      }
+  }
+  // Perbarui waktu akses terakhir
+  req.session.lastAccess = new Date();
   next();
 });
 
