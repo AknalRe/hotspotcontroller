@@ -1,0 +1,180 @@
+form {
+    width: 100%;
+    margin-bottom: 20px
+}
+
+.form-login {
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+input[type=submit] {
+    background: #3e4d59;
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    height: 44px;
+    border-radius: 6px;
+    -webkit-transition: background .3s ease-in-out;
+    transition: background .3s ease-in-out
+}
+
+input[type=submit]:focus,
+input[type=submit]:hover {
+    background: #33404a
+}
+
+input {
+    outline: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none
+}
+
+input:focus {
+    outline: 0
+}
+
+input[type=password],
+input[type=text] {
+    text-align: center;
+    width: 100%;
+    border: 0,5px solid;
+    background-color: rgba(255, 255, 255, .8);
+    height: 44px;
+    /* padding: 3px 20px 3px 40px; */
+    margin-bottom: 20px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, .8);
+    -webkit-transition: -webkit-box-shadow .3s ease-in-out;
+    transition: -webkit-box-shadow .3s ease-in-out;
+    transition: box-shadow .3s ease-in-out;
+    transition: box-shadow .3s ease-in-out, -webkit-box-shadow .3s ease-in-out
+}
+
+input[type=password]:focus,
+input[type=text]:focus {
+    -webkit-box-shadow: 0 0 5px 0 rgba(255, 255, 255, 1);
+    box-shadow: 0 0 5px 0 rgba(255, 255, 255, 1)
+}
+
+input,
+label {
+    margin: 5px;
+    vertical-align: middle;
+    white-space: normal;
+    background: 0 0;
+    line-height: 1
+}
+
+label {
+    position: relative;
+    display: block
+}
+
+/*@keyframes slideIn {*/
+/*    from {*/
+/*        transform: translateX(100%);*/
+/*    }*/
+/*    to {*/
+/*        transform: translateX(0);*/
+/*    }*/
+/*}*/
+
+.btn-lupa-akun {
+    background: #b1bac1;
+    color: rgb(0, 0, 0);
+}
+
+.btn-lupa-akun:hover {
+    background:  #000000;
+    color: white;
+}
+
+.btn-kembali-login {
+    background: #0291ff;
+    color: rgb(0, 0, 0);
+}
+
+.btn-kembali-login:hover {
+    background:  #000000;
+    color: white;
+}
+
+.form-lupa-akun {
+    display: none;
+}
+
+.login-form {
+    display: block;
+}
+
+.flex-container {
+    /* border: 1px solid #f8f8f8;  */
+    display: flex;
+}
+
+.btn-kirim-kode {
+    margin-top: 9px;
+    margin-left: 20px;
+    background: blue;
+    color: white;
+}
+
+.btn-kirim-kode:hover {
+    background: rgb(1, 1, 176);
+    color: white;
+}
+
+/* Media Query untuk ukuran layar kecil */
+@media only screen and (max-width: 450px) {
+    .flex-container {
+        flex-direction: column; /* Mengubah arah tata letak menjadi kolom saat ukuran layar kecil */
+    }
+
+    .btn-kirim-kode {
+        margin-top: 9px;
+        margin-left: 0; /* Mengatur margin kembali ke 0 saat ukuran layar kecil */
+    }
+}
+
+.logger-info {
+    pointer-events: none;
+    /* position: fixed; */
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    max-width: 50vh;
+    z-index: 9999;
+    text-align: center;
+    padding: 2px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid #f8f8f8;
+    background-color: #f1f1f1;
+    color: #333;
+    opacity: 0;
+    transform: translateX(0);
+    transition: transform 0.5s, opacity 0.5s;
+    display: none;
+}
+
+.success {
+    color: #000000;
+    background-color: #00ff08; /* Warna hijau untuk notifikasi sukses */
+}
+
+.error {
+    color: #ffffff;
+    background-color: #f44336; /* Warna merah untuk notifikasi gagal */
+}
+
+.logger-info.show {
+    opacity: 1;
+    display: block;
+    transform: translateX(0);
+}

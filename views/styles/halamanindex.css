@@ -1,0 +1,23 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.mikrotik-status {
+    background: black;
+    color: red;
+}
+
+.logout-button {
+    margin-left: 5px;
+    display: inline-block;
+    background: none;
+    border: none;
+}
+
+.logout-button button {
+    background: none;
+    border: none;
+}

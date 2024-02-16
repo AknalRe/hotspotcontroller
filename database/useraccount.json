@@ -1,0 +1,10 @@
+{
+  "users": {
+    "1": {
+      "username": "Renaldi",
+      "password": "Renaldi123",
+      "name": "Renaldi",
+      "role": "Administrator"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+<script>
+function tampilkanFormLupaAkun() {
+    // Sembunyikan form login
+    document.getElementById('login-form').style.display = 'none';
+
+    // Tampilkan form lupa akun
+    document.getElementById('form-lupa-akun').style.display = 'block';
+}
+
+function tampilkanFormLogin() {
+    document.getElementById('form-lupa-akun').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+}
+
+function kirimKode() {
+    const username = document.getElementById('reset-username').value;
+    console.log(username)
+}
+
+document.getElementById('login-post').addEventListener('submit', function (event) {
+    event.preventDefault(); // Menghentikan pengiriman formulir default
+
+    // Mengumpulkan data formulir
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Menyiapkan data untuk dikirim sebagai JSON
+    const formData = {
+        username: username,
+        password: password
+    };
+
+    // Mengirim permintaan POST menggunakan fetch API
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle respon dari server sesuai kebutuhan
+        console.log(data);
+        if (data.success) {
+            showInfo(data.success, data.message);
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 5000);
+        } else {
+            notiflog(data.success, data.message);
+        }
+    })
+    .catch(error => {
+        console.log('Error:', error);
+    });
+});
+
+function showInfo(success, message) {
+    var loggerInfo = document.getElementById('logger-info');
+    loggerInfo.innerText = message; // Ganti dengan pesan yang diinginkan
+    if (success) {
+        loggerInfo.classList.add('success');
+    } else {
+        loggerInfo.classList.add('error');
+    }
+
+    loggerInfo.classList.add('show'); // Tambahkan kelas show
+
+    setTimeout(function() {
+        loggerInfo.classList.remove('show'); // Hapus kelas show setelah 5 detik
+    }, 5000); // 5000 milidetik = 5 detik
+}
+</script>
