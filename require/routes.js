@@ -1,6 +1,22 @@
 const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main')
 const { router, isAuthenticated } = require('./server');
 
+// GET Route
+
+router.get('/', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    req.session.prevpage = req.path;
+    res.render("index", { author, title, username, role, mikrotikstatus, nomorwa, name, page: "Home", halaman: "halamanindex", message: "" })
+});
+
+
+// POST Route
+
+router.post('/test', async (req, res) => {
+    res.send({ success:true, message: "Hello World!" });
+})
+
 router.post('/login', async (req, res) => {
     const ip = req ? req.ip : 'unknown';
     try {
@@ -45,17 +61,6 @@ router.post("/logout", isAuthenticated, async (req, res) => {
         logg(false, `(${username}) Gagal Logout : ${err}`)
         res.json({ success: false, message: `(${username}) Gagal Logout`})
     }
-})
-
-router.get('/', isAuthenticated, async (req, res) => {
-    const { mikrotikstatus } = Mikrotik;
-    const { username, role, name } = req.session;
-    req.session.prevpage = req.path;
-    res.render("index", { author, title, username, role, mikrotikstatus, nomorwa, name, page: "Home", halaman: "halamanindex", message: "" })
-});
-
-router.post('/test', async (req, res) => {
-    res.send({ success:true, message: "Hello World!" });
 })
 
 router.use((req, res) => {
