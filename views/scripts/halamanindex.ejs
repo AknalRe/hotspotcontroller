@@ -115,7 +115,6 @@
                 if(data.success) {
                     document.getElementById('username').value = '';
                     document.getElementById('password').value = '';
-                    document.getElementById('jenisAkun').value = '';
                 }
             })
             .catch(error => {
@@ -128,7 +127,252 @@
         togglePasswordVisibility();
     });
 
-    function tambahakunhotspot() {
+    function formatkuota(kuota) {
+        let format;
+        if (kuota.length > 9) {
+            format = (kuota / (1024 * 1024 * 1024)).toFixed(2) + " GB"; // Konversi ke MB jika lebih dari 9
 
+        } else {
+            format = (kuota / (1024 * 1024)).toFixed(2) + " MB"; // Konversi ke GB jika tidak lebih dari 9
+        }
+        return format;
     }
 </script>
+
+
+<% if (mikrotikstatus) { %>
+    <script>
+        let divtambahakun = document.getElementById('tambah-hotspot').style;
+        let divlistakun = document.getElementById('list-akun-hotspot').style;
+
+        function listhotspot() {
+            fetch('/hotspotuserlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle respon dari server sesuai kebutuhan
+                // console.log(data);
+        
+                // Tampilkan data ke dalam tabel
+                displayDataInTable(data);
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+        }
+
+        function displayDataInTable(data) {
+            const tbody = document.querySelector('.custom-table-body-listhotspotuser');
+            tbody.innerHTML = '';
+            let count = 0;
+
+            if ("<%= role %>" === "Administrator") {
+                data.forEach(item => {
+                    count++
+                    var row = document.createElement('tr');
+                
+                    var countCell = document.createElement('td');
+                    countCell.textContent = count + ".";
+                    countCell.style.width = '30px';
+                
+                    var nameCell = document.createElement('td');
+                    nameCell.textContent = item.name;
+
+                    var passwordCell = document.createElement('td');
+                    passwordCell.textContent = item.password;
+
+                    var pemakaianCell = document.createElement('td');
+                    if (item["bytes-in"] > 0 && item["bytes-out"] > 0) {
+                        let download = formatkuota(item["bytes-out"]);
+                        let upload = formatkuota(item["bytes-in"]);
+                        if (download.includes("GB") || upload.includes("GB")) {
+                            pemakaianCell.style.color = "blue"
+                        }
+                        pemakaianCell.textContent = download + " / " + upload;
+                    } else {
+                        pemakaianCell.style.color = 'red';
+                        pemakaianCell.textContent = "Akun Belum Di Pakai";
+                    }
+
+                    var profileCell = document.createElement('td');
+                    profileCell.textContent = item.profile;
+
+                    var statusCell = document.createElement('td');
+                    let status = item.disabled === 'false' ? 'Aktif' : 'Tidak Aktif';
+                    statusCell.style.color = item.disabled === 'false' ? 'blue' : 'red';
+                    statusCell.textContent = status
+
+                    var actionCell = document.createElement('td')
+                    // actionCell.textContent = "SOON";
+
+                    if (item.profile === 'default') {
+                        actionCell.textContent = "Akun Default";
+                    } else {
+                        var deleteButton = document.createElement('button');
+                        deleteButton.classList.add('btn', 'btn-vpn-hapus', 'btn-danger');
+                        deleteButton.textContent = 'Hapus';
+                        deleteButton.style.margin = '5px';
+                        deleteButton.addEventListener('click', function () {
+                            deleteakunhotspot(item['.id'], item.name);
+                        });
+
+                        var nonaktifkanButton = document.createElement('button');
+                        nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-warning');
+                        nonaktifkanButton.textContent = item.disabled === "false" ? "Nonaktifkan" : "Aktifkan";
+                        nonaktifkanButton.style.margin = '5px';
+                        nonaktifkanButton.addEventListener('click', function () {
+                            nonaktifkanakunhotspot(item['.id'], item.disabled === "false" ? "true" : "false", item.name)
+                        })
+
+                        var editForm = document.createElement('form');
+                        editForm.method = 'GET';
+                        editForm.action = `/editakunhotspot/${item['.id']}`;
+                        var editButton = document.createElement('button');
+                        editButton.style.margin = '5px';
+                        editButton.type = 'submit';
+                        editButton.textContent = 'Edit';
+                        editButton.className = 'btn btn-primary';
+                        editForm.appendChild(editButton);
+
+
+                        actionCell.appendChild(deleteButton)
+                        actionCell.appendChild(nonaktifkanButton)
+                        actionCell.appendChild(editForm);
+                    }
+
+                    row.appendChild(countCell);
+                    row.appendChild(nameCell);
+                    row.appendChild(passwordCell);
+                    row.appendChild(pemakaianCell);
+                    row.appendChild(profileCell);
+                    row.appendChild(statusCell);
+                    row.appendChild(actionCell);
+
+                    tbody.appendChild(row);
+                })
+            } else {
+                if (data.length > 0) {
+                    data.forEach(item => {
+                        if (item.name !== "HaiCantikTamu") {
+                        count++
+                        var row = document.createElement('tr');
+                    
+                        var countCell = document.createElement('td');
+                        countCell.textContent = count + ".";
+                        countCell.style.width = '30px';
+                    
+                        var nameCell = document.createElement('td');
+                        nameCell.textContent = item.name;
+
+                        // var passwordCell = document.createElement('td');
+                        // passwordCell.textContent = item.password;
+
+                        // var profileCell = document.createElement('td');
+                        // profileCell.textContent = item.profile;
+
+                        var statusCell = document.createElement('td');
+                        let status = item.disabled === 'false' ? 'Aktif' : 'Tidak Aktif';
+                        statusCell.style.color = item.disabled === 'false' ? 'blue' : 'red';
+                        if (item["bytes-in"] > 0 && item["bytes-out"] > 0) {
+                            statusCell.textContent = status + " / Sudah digunakan";
+                        } else {
+                            // statusCell.style.color = "black"
+                            statusCell.textContent = status + " / Belum digunakan";
+                        }
+                        // statusCell.textContent = status
+
+                        var actionCell = document.createElement('td')
+                        // actionCell.textContent = "SOON";
+
+                        var nonaktifkanButton = document.createElement('button');
+                        nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-warning');
+                        nonaktifkanButton.textContent = item.disabled === "false" ? "Nonaktifkan" : "Aktifkan";
+                        nonaktifkanButton.style.margin = '5px';
+                        nonaktifkanButton.addEventListener('click', function () {
+                            nonaktifkanakunhotspot(item['.id'], item.disabled === "false" ? "true" : "false", item.name)
+                        })
+
+                        actionCell.appendChild(nonaktifkanButton)
+
+                        row.appendChild(countCell);
+                        row.appendChild(nameCell);
+                        // row.appendChild(passwordCell);
+                        // row.appendChild(profileCell);
+                        row.appendChild(statusCell);
+                        row.appendChild(actionCell);
+
+                        tbody.appendChild(row);
+                        }
+                    })
+                } else {
+                    var row = document.createElement('tr');
+                    var statusCell = document.createElement('td');
+                    statusCell.textContent = "Tidak ada akun tamu";
+                    statusCell.style.textAlign = "center";
+                    statusCell.style.color = "red";
+                    statusCell.colSpan = 8;
+                    row.appendChild(statusCell);
+                    tbody.appendChild(row);
+                }
+            }
+        }
+        
+        function nonaktifkanakunhotspot(id, status, nama) {
+            const formData = {
+                id: id,
+                status: status,
+                nama: nama,
+            }
+            fetch('/nonaktifkanakunhotspot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                showNotification(data.success, data.message);
+                listhotspot()
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    <% if (role == 'Administrator') { %>
+        <script>
+
+            function tampilkanlisthotspot() {
+                divtambahakun.display = 'none';
+                listhotspot();
+                divlistakun.display = 'block';
+            }
+
+            function tampilkantambahhotspot() {
+                divlistakun.display = 'none';
+                divtambahakun.display = 'block';
+            }
+        </script>
+    <% } else { %>
+        <script>
+
+            function tampilkanlisthotspot() {
+                divtambahakun.display = 'none';
+                listhotspot();
+                divlistakun.display = 'block';
+            }
+
+            function tampilkantambahhotspot() {
+                divlistakun.display = 'none';
+                divtambahakun.display = 'block';
+            }
+        </script>
+    <% } %>
+<% } else { %>
+<% } %>

@@ -16,6 +16,7 @@ const databaseFolder = path.dirname(fileuser);
 
 const Mikrotik = {
     mikrotikstatus: false,
+    mikrotikidentity: '',
 };
 
 async function readUserFile() {

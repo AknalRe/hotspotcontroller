@@ -1,5 +1,5 @@
 const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main');
-const { KirimPesanWA, kirimNotif } = require('./whatsapp');
+const { KirimPesanWA, kirimNotif, notif } = require('./whatsapp');
 const { router, isAuthenticated } = require('./server');
 const { addakun } = require('./mikrotikfunction');
 const { client } = require('./mikrotik');
@@ -94,11 +94,60 @@ router.post('/tambahakunhotspot', isAuthenticated, async (req, res) => {
     const { username, password, jenisAkun } = req.body;
     const response = password ? await addakun(username, jenisAkun, password) : await addakun(username, jenisAkun);
     if (response.success) {
-        const pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${req.hostname}\nUsername : ${req.session.username}\nRole : ${req.session.role}\nMessage : \n\n'Menambahkan akun ${username}-${jenisAkun}'`
-        const notif = await kirimNotif(pesan)
-        logg(notif.success, notif.success ? `Berhasil mengirimkan notif informasi tambahakun` : `Gagal mengirimkan notif informasi tambahakun`)
+        const notifres = await notif(req.hostname, req.session.username, req.session.role, `Menambahkan akun ${username}-${jenisAkun}`)
+        logg(notif.success, notifres.success ? `Berhasil mengirimkan notif informasi tambahakun` : `Gagal mengirimkan notif informasi tambahakun`)
     }
     res.json(response);
+})
+
+router.post("/hotspotuserlist", isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const role = req.session.role;
+    try {
+        if (mikrotikstatus) {
+            const response = await client.write("/ip/hotspot/user/print");
+            
+            const filteredData = response.filter(item => {
+                if (role === "Administrator") {
+                    return item[".id"] !== "*0" && item[".id"] !== "*2";
+                } else {
+                    return item.profile && item.profile.includes("Tamu") && item[".id"] !== "*0" && item[".id"] !== "*2";
+                }
+            });
+            res.json(filteredData);
+        } else {
+            res.json({ success: false, message: `Mikrotik tidak terhubung`})
+        }
+    } catch (err) {
+        res.json({success: false, message: err})
+    }
+});
+
+router.post('/nonaktifkanakunhotspot', isAuthenticated, async (req, res) => {
+    const { username, password } = req.session
+    const { mikrotikstatus } = Mikrotik;
+    const { id, status, nama } = req.body;
+    if (mikrotikstatus == true) {
+        try {
+            await client.write("/ip/hotspot/user/set", [
+                "=.id=" + id,
+                "=disabled=" + status,
+            ])
+            let message;
+            if (status == "true") {
+                message = "menonaktifkan";
+            } else {
+                message = "mengaktifkan";
+            }
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil ${message} akun ${nama}`)
+            logg(true, `(${username}) Berhasil ${message} user (${nama})`);
+            res.json({success: true, message: `Berhasil ${message} user (${nama})`});
+        } catch (err) {
+            res.json({success: false, message: `Gagal menonaktifkan user (${nama})`})
+        }
+    } else {
+        res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
+    }
 })
 
 router.use((req, res) => {

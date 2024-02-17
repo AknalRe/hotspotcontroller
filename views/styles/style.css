@@ -33,7 +33,7 @@ body {
     margin: 30px;
     display: flex;
     justify-content: center;
-    max-height: 80vh;
+    max-height: 100%;
 }
 
 .page {
@@ -174,12 +174,25 @@ body {
     transform: translateX(0);
 }
 
+/* CSS untuk footer */
 .container-footer {
-    position: absolute;
-    z-index: 1;
+    background-color: rgba(255, 254, 254, 0.02);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.container-footer a:hover {
+    color: #ffc107;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.container-footer {
+    position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
 }

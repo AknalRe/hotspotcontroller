@@ -16,6 +16,7 @@
         </div>
     <% } %>
     <% if (role == "Administrator") { %>
+
         <div class="tambah-hotspot" id="tambah-hotspot">
             <div class="list-menu-flex">
                 <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
@@ -50,7 +51,41 @@
                 </form>
             </div>
         </div>
+
+        <div class="list-akun-hotspot" id="list-akun-hotspot" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuserqueue()">Bandwidth Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanleaseclient()">List Client</button>
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h4>List Akun Hotspot</h4>
+                    <h5 id="info-akun-aktif"></h5>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-hotspot">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Pemakaian (Down/Up)</th>
+                                <th>Profile</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listhotspotuser">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     <% } else { %>
+
         <div class="tambah-hotspot" id="tambah-hotspot">
             <div class="list-menu-flex">
                 <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
@@ -85,5 +120,32 @@
                 </form>
             </div>
         </div>
+
+        <div class="list-akun-hotspot" id="list-akun-hotspot" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h4>List Akun Hotspot</h4>
+                    <h5 id="info-akun-aktif"></h5>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-hotspot">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listhotspotuser">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     <% } %>
 </div>

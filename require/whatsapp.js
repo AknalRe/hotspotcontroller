@@ -1,3 +1,4 @@
+const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main');
 const axios = require('axios');
 
 const urlWA = process.env.LINKWA;
@@ -76,7 +77,18 @@ async function kirimNotif(pesan) {
     }
 }
 
+async function notif(hostname, username, role, message) {
+    let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${hostname}\nMikrotik : ${Mikrotik.mikrotikidentity}\nUsername : ${username}\nRole : ${role}\nMessage : \n\n'${message}'`
+    try {
+        const response = await kirimNotif(pesan);
+        return response
+    } catch (err) {
+        return { success: false, response: err.message}
+    }
+}
+
 module.exports = {
     KirimPesanWA,
     kirimNotif,
+    notif,
 };

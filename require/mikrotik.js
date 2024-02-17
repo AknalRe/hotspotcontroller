@@ -24,6 +24,8 @@ async function connect(){
         response = await client.connect();
         cekstatusinterval = setInterval(CekStatus, interval * 60 * 1000)
         Mikrotik.mikrotikstatus = true;
+        Mikrotik.mikrotikidentity = (await client.write('/system/identity/print'))[0].name;
+        // console.log(Mikrotik.mikrotikidentity);
         logg(true, `Mikrotik berhasil terhubung`)
         return { success: true, message: `Mikrotik berhasil terhubung`}
     } catch (err){
@@ -60,6 +62,7 @@ async function CekStatus() {
 async function status(){
     try {
         await client.write("/interface/print");
+        Mikrotik.mikrotikidentity = (await client.write('/system/identity/print'))[0].name;
         return { success: true, message: "Koneksi dengan Mikrotik tetap aktif" };
     } catch (err){
         return { success: false, message: "Koneksi dengan Mikrotik terputus", response: err };
