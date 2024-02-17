@@ -1,10 +1,11 @@
 <script>
-    console.log("<%= mikrotikstatus %>")
-    
+    const role = "<%= role %>";
+    // console.log("<%= mikrotikstatus %>")
+
     const currentTime = new Date().getHours();
 
-    function getUcapan(){
-        if(currentTime >= 5 && currentTime < 11) {
+    function getUcapan() {
+        if (currentTime >= 5 && currentTime < 11) {
             return "Pagi"
         } else if (currentTime >= 11 && currentTime < 15) {
             return "Siang"
@@ -14,7 +15,7 @@
             return "Malam"
         }
     }
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('DOMContentLoaded', function () {
         const usernameElement = document.getElementById('ucapan');
         const name = "<%= name %>";
         // console.log(name)
@@ -31,20 +32,103 @@
             },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(data => {
-            // console.log(data);
-            if (data.success) {
-                showNotification(data.success, data.message);
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 5000);
-            } else {
-                showNotification(data.success, data.message);
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    showNotification(data.success, data.message);
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 5000);
+                } else {
+                    showNotification(data.success, data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    updateJenisAkunOptions()
+
+    function updateJenisAkunOptions() {
+        fetch('/infoprofilhotspot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
+            .then(response => response.json())
+            .then(data => {
+                // Hapus semua opsi saat ini
+                // console.log(data.response)
+                const selectElement = document.getElementById('jenisAkun');
+                selectElement.innerHTML = "";
+                data.response.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.textContent = option.name;
+                    optionElement.value = option.name;
+                    selectElement.appendChild(optionElement);
+                });
+                togglePasswordVisibility();
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    function togglePasswordVisibility() {
+        var jenisAkun = document.getElementById("jenisAkun");
+        var passwordField = document.getElementById("formpassword");
+        if (jenisAkun.value === "Tamu") {
+            passwordField.style.display = "none";
+        } else {
+            passwordField.style.display = "block";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('tambahAkunForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            const jenisAkun = document.getElementById('jenisAkun').value;
+            // if (!password) {
+            //     password = username;
+            // }
+            const formData = {
+                username: username,
+                jenisAkun: jenisAkun,
+                password: password,
+            }
+            fetch('/tambahakunhotspot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                showNotification(data.success, data.successwa == true ? `${data.message} & Berhasil mengirimkan pesan whatsapp` : data.message);
+                if(data.success) {
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('jenisAkun').value = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
+    })
+
+    document.getElementById("jenisAkun").addEventListener("change", function() {
+        togglePasswordVisibility();
+    });
+
+    function tambahakunhotspot() {
+
     }
 </script>

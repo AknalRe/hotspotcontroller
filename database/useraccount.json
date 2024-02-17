@@ -5,6 +5,12 @@
       "password": "Renaldi123",
       "name": "Renaldi",
       "role": "Administrator"
+    },
+    "2": {
+      "username": "admin2",
+      "password": "csoperator2",
+      "name": "CS Clarice MJS 2",
+      "role": "Admin"
     }
   }
 }

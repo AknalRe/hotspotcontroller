@@ -71,8 +71,8 @@ async function kirimNotif(pesan) {
         // console.log(response.data);
         return response.data;
     } catch (err) {
-        console.error(err);
-        return { success: false, response: err };
+        console.error(err.response.data || err.message || err);
+        return { success: false, response: err.response.data || err.message || err };
     }
 }
 

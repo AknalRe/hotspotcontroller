@@ -27,7 +27,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new session.MemoryStore(),
-  cookie: { maxAge: 180000 }
+  cookie: { maxAge: 540000 }
 }));
 
 app.use((req, res, next) => {

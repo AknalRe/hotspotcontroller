@@ -3,6 +3,7 @@ require('dotenv').config();
 const title = process.env.TITLE;
 const author = process.env.AUTHOR;
 const nomorwa = process.env.NOMORWA;
+const hostname = process.env.HOSTNAME;
 
 const fs = require('fs');
 const path = require('path');
