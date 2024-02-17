@@ -344,6 +344,29 @@
                 console.error('Error:', error);
             });
         }
+
+        function deleteakunhotspot(id, nama) {
+            const formData = {
+                id: id,
+                nama: nama,
+            }
+            fetch('/deleteakunhotspot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                showNotification(data.success, data.message);
+                listhotspot()
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
     <% if (role == 'Administrator') { %>
         <script>

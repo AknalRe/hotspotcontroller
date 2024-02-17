@@ -1,0 +1,212 @@
+a,
+body,
+div,
+form,
+html,
+img,
+input,
+label,
+p,
+span {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* font-family: sans-serif, Arial */
+}
+
+body,
+html {
+    min-height: 100%;
+    overflow: auto
+}
+
+body {
+    background: #a2a09b;
+    background: linear-gradient(135deg, hsl(236.6, 0%, 53.52%) 0%, hsla(236.6, 0%, 53.52%, 0) 70%),
+                linear-gradient(25deg, hsl(220.75, 34.93%, 26.52%) 10%, hsla(220.75, 34.93%, 26.52%, 0) 80%),
+                linear-gradient(315deg, hsl(46.42, 36.62%, 83.92%) 15%, hsla(46.42, 36.62%, 83.92%, 0) 80%),
+                linear-gradient(245deg, hsl(191.32, 50.68%, 56.45%) 100%, hsla(191.32, 50.68%, 56.45%, 0) 70%);
+}
+
+.main-page {
+    z-index: 1;
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    max-height: 100%;
+}
+
+.page {
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(201, 201, 201, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.main {
+    margin: 10px;
+    background-color: rgba(201, 201, 201, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: calc(5vh - 10px);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.ie-fixMinHeight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+}
+
+.wrap {
+    margin: auto;
+    padding: 40px;
+    -webkit-transition: width .3s ease-in-out;
+    transition: width .3s ease-in-out
+}
+
+@media only screen and (min-width:1px) and (max-width:100%) {
+    .wrap {
+        width: 100%
+    }
+}
+
+@media (min-width:576px) {
+    .wrap {
+        width: 100%
+    }
+
+    /* * {
+        font-size: 14px !important
+    } */
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn
+}
+
+.notifAll {
+    pointer-events: none;
+    position: fixed;
+    right: -7px;
+    top: 10px;
+    max-width: 350px;
+    z-index: 9999;
+    text-align: center;
+    padding: 10px 15px 10px 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #f8f8f8;
+    background-color: #f1f1f1;
+    animation: slideIn 0.5s ease-out, fadeOut 0.5s 5s forwards;
+    opacity: 0;
+    transform: translateX(0);
+    transition: transform 0.5s, opacity 0.5s;
+    display: none;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.success {
+    color: #000000;
+    background-color: #00ff08; /* Warna hijau untuk notifikasi sukses */
+}
+
+.error {
+    color: #ffffff;
+    background-color: #f44336; /* Warna merah untuk notifikasi gagal */
+}
+
+.notifAll.show {
+    opacity: 1;
+    display: block;
+    transform: translateX(0);
+}
+
+/* CSS untuk footer */
+.container-footer {
+    background-color: rgba(255, 254, 254, 0.02);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.container-main {
+    max-width: 1200px; /* Lebar konten maksimum untuk tampilan desktop */
+    margin: 0 auto; /* Atur margin agar konten berada di tengah halaman */
+    padding: 0 20px; /* Padding untuk ruang di sekitar konten */
+}
+
+/* CSS untuk tampilan mobile */
+@media (max-width: 768px) {
+    .container-main {
+        max-width: 100%; /* Lebar konten maksimum untuk tampilan mobile */
+        padding: 0 10px; /* Padding yang lebih kecil untuk tampilan mobile */
+    }
+}
+
+.container-footer a:hover {
+    color: #ffc107;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.container-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}

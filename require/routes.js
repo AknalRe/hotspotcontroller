@@ -124,27 +124,47 @@ router.post("/hotspotuserlist", isAuthenticated, async (req, res) => {
 });
 
 router.post('/nonaktifkanakunhotspot', isAuthenticated, async (req, res) => {
-    const { username, password } = req.session
     const { mikrotikstatus } = Mikrotik;
     const { id, status, nama } = req.body;
+    let message;
+    if (status == "true") {
+        message = "menonaktifkan";
+    } else {
+        message = "mengaktifkan";
+    }
     if (mikrotikstatus == true) {
         try {
             await client.write("/ip/hotspot/user/set", [
                 "=.id=" + id,
                 "=disabled=" + status,
             ])
-            let message;
-            if (status == "true") {
-                message = "menonaktifkan";
-            } else {
-                message = "mengaktifkan";
-            }
             await notif(req.hostname, req.session.username, req.session.role, `Berhasil ${message} akun ${nama}`)
-            logg(true, `(${username}) Berhasil ${message} user (${nama})`);
+            logg(true, `(${req.session.username}) Berhasil ${message} user (${nama})`);
             res.json({success: true, message: `Berhasil ${message} user (${nama})`});
         } catch (err) {
-            res.json({success: false, message: `Gagal menonaktifkan user (${nama})`})
+            logg(false, `(${req.session.username}) Gagal ${message} user (${nama})`);
+            res.json({success: false, message: `Gagal ${message} user (${nama})`})
         }
+    } else {
+        res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
+    }
+})
+
+router.post('/deleteakunhotspot', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { id, nama } = req.body;
+    if (mikrotikstatus == true) {
+        try {
+            await client.write("/ip/hotspot/user/remove", [
+                "=.id=" + id,
+            ]);
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil menghapus user ${nama}`)
+            logg(true, `(${req.session.username}) Berhasil menghapus user (${nama})`);
+            res.json({success: true, message: `Berhasil menghapus user (${nama})`});
+        } catch (err) {
+            logg(false, `(${req.session.username}) Gagal menghapus user (${nama})`);
+            res.json({success: false, message: `Gagal menghapus user (${nama})`, response: err});
+        };
     } else {
         res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
     }
