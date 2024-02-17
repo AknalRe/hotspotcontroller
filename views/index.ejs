@@ -15,24 +15,25 @@
 </head>
 <body>
     <div class="notifAll" id="notifAll"></div>
-
-    <% if (halaman !== "halamanlogin") { %>
-        <div class="main-page">
-            <div class="page">
-                <div class="wrap animated fadeIn">
-                    <%- include(`partials/${halaman}`) %>
+    <div class="container-main">
+        <% if (halaman !== "halamanlogin") { %>
+            <div class="main-page">
+                <div class="page">
+                    <div class="wrap animated fadeIn">
+                        <%- include(`partials/${halaman}`) %>
+                    </div>
                 </div>
             </div>
-        </div>
-    <% } else { %>
-        <div class="ie-fixMinHeight">
-            <div class="main">
-                <div class="wrap animated fadeIn">
-                    <%- include(`partials/${halaman}`) %>
+        <% } else { %>
+            <div class="ie-fixMinHeight">
+                <div class="main">
+                    <div class="wrap animated fadeIn">
+                        <%- include(`partials/${halaman}`) %>
+                    </div>
                 </div>
             </div>
-        </div>
-    <% } %>
+        <% } %>
+    </div>
     
     <footer>
         <div class="container-footer">
