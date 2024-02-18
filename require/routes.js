@@ -354,6 +354,7 @@ router.post('/generateQRCode', isAuthenticated, async(req, res) => {
 
 router.post('/deleteQRCode', isAuthenticated, async (req, res) => {
     const { fileName } = req.body;
+    console.log(fileName);
     const imagePath = path.join(__dirname, '..', 'views', 'images', `${fileName}.png`);
 
     try {
