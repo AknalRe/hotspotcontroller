@@ -932,6 +932,89 @@
                     });
                 }
             });
+
+
+            const listakunhotspot = document.getElementById('list-akun-hotspot') //.style.display = 'block'
+            const useraktif = document.getElementById('info-user-aktif') // .style.display = 'block'
+            const queue = document.getElementById('info-queue-user') // .style.display = 'block'
+            const client = document.getElementById('info-lease-user') // .style.display = 'block'
+            const binding = document.getElementById('info-binding-user') // .style.display = 'block'
+            document.getElementById('info-device-mikrotik').style.display = 'none';
+            setTimeout(() => {
+                if (listakunhotspot.style.display == 'block' || useraktif.style.display == 'block' || queue.style.display == 'block' || client.style.display == 'block' || binding.style.display == 'block') {
+                    document.getElementById('info-device-mikrotik').style.display = 'none';
+                } else {
+                    document.getElementById('info-device-mikrotik').style.display = 'block';
+                }
+            }, 6000);
+            
+            socket.on('identity', function(data) {
+                // console.log(data)
+                const identity = data.name
+                document.getElementById('info-mikrotik-identity').textContent = `Nama Mikrotik : ${identity}`;
+            })
+            
+            socket.on('resource', function(data) {
+                // console.log(data);
+                document.getElementById('info-mikrotik-uptime').textContent = " " + formatUptime(data.uptime);
+                document.getElementById('info-mikrotik-cpu').textContent = " " + data['cpu-load'] + "%";
+            });
+
+            function formatUptime(time) {
+                var regex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?(\d+s)?/;
+                var match = time.match(regex);
+
+                if (match) {
+                    var weeks = match[1] ? parseInt(match[1]) : 0;
+                    var days = match[2] ? parseInt(match[2]) : 0;
+                    var hours = match[3] ? parseInt(match[3]) : 0;
+                    var minutes = match[4] ? parseInt(match[4]) : 0;
+                    var seconds = match[5] ? parseInt(match[5]) : 0;
+
+                    var formattedTime = ((weeks * 7) + days) + " Hari " + hours + " Jam " + minutes + " Menit";
+                    return formattedTime;
+                } else {
+                    return "0";
+                }
+            }
+
+            socket.on('monitortraffic', function(speed) {
+                // console.log(speed);
+                var downloadText = speed['tx-bits-per-second'];
+                    var uploadText = speed['rx-bits-per-second'];
+                    var downloadSpeed, uploadSpeed;
+                    
+                    if (downloadText >= 1000000) {
+                        downloadSpeed = (downloadText / 1000000).toFixed(2) + " Mbps";
+                    } else {
+                        downloadSpeed = (downloadText / 1000).toFixed(2) + " kbps";
+                    }
+                
+                    if (uploadText >= 1000000) {
+                        uploadSpeed = (uploadText / 1000000).toFixed(2) + " Mbps";
+                    } else {
+                        uploadSpeed = (uploadText / 1000).toFixed(2) + " kbps";
+                    }
+                
+                    downloadSpeed = "Download : " + downloadSpeed;
+                    uploadSpeed = "Upload : " + uploadSpeed;
+                    
+                    document.getElementById('info-mikrotik-traffic').textContent = " " + downloadSpeed + " / " + uploadSpeed;
+            });
+
+            socket.on('interface', function(data) {
+                let totalBytes = 0;
+                data.forEach(function(item) {
+                    if (item.name === "ether1" || item.name === "ether2") {
+                        var upload = (item['tx-byte'] / (1024 * 1024 * 1024));
+                        var download = (item['rx-byte'] / (1024 * 1024 * 1024));
+                        totalBytes = totalBytes + (upload+download);
+                    }
+                        
+                    var totalGB = (totalBytes.toFixed(2)) + "GB";
+                    document.getElementById('info-mikrotik-kuota').textContent = " " + totalGB;
+                })
+            });
         </script>
         <% } else { %>
             <script>
