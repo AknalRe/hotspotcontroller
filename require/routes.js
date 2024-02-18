@@ -3,6 +3,9 @@ const { KirimPesanWA, kirimNotif, notif } = require('./whatsapp');
 const { router, isAuthenticated } = require('./server');
 const { addakun, editakun } = require('./mikrotikfunction');
 const { client } = require('./mikrotik');
+const fs = require('fs');
+const path = require('path');
+const qr = require('qrcode');
 
 // GET Route
 
@@ -313,6 +316,60 @@ router.post('/editqueue', isAuthenticated, async (req, res) => {
     } catch (err) {
         logg(false, `Error mengedit queue ${nama}, error: ${err.message}`);
         res.json({ success: false, message: `Error mengedit queue ${nama}, error: ${err.message}` });
+    }
+});
+
+// router.post('/generateQRCode', isAuthenticated, async(req, res) => {
+//     const { ssid, password } = req.body;
+//     const wifiUri = `WIFI:T:WPA;S:${ssid};P:${password};;`;
+//     qr.toDataURL(wifiUri, function (err, url) {
+//         if (err) {
+//             console.error('Error:', err);
+//             return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+//         res.json({ url });
+//     });
+// });
+
+router.post('/generateQRCode', isAuthenticated, async(req, res) => {
+    const { ssid, password } = req.body;
+    const wifiUri = `WIFI:T:WPA;S:${ssid};P:${password};;`
+    const nama = `${ssid}_QRCode`
+    const path = `./views/images/${nama}.png`
+    try {
+        qr.toFile(
+            path,
+            wifiUri,
+            { errorCorrectionLevel: 'H', scale: 8 }, // Mengatur resolusi dengan opsi scale
+            function (err) {
+                if (err) throw err;
+                console.log(`QR Code berhasil disimpan sebagai ${ssid}_QRCode.png`);
+            }
+        );
+        res.json({ success: true, message: `Berhasil generate QR WiFi ${ssid}`, url: `${nama}`})
+    } catch (err) {
+        res.json({ success: false, message: `Gagal generate QR WiFi ${ssid}`, url: `${nama}`})
+    }
+})
+
+router.post('/deleteQRCode', isAuthenticated, async (req, res) => {
+    const { fileName } = req.body;
+    const imagePath = path.join(__dirname, '..', 'views', 'images', `${fileName}.png`);
+
+    try {
+        // Periksa apakah file ada sebelum menghapusnya
+        if (fs.existsSync(imagePath)) {
+            // Hapus file
+            fs.unlinkSync(imagePath);
+            logg(true, `Gambar QR Code ${fileName} berhasil dihapus`);
+            res.json({ success: true, message: `Gambar QR Code ${fileName} berhasil dihapus` });
+        } else {
+            logg(false, `Gambar QR Code ${fileName} tidak ditemukan`)
+            res.json({ success: false, message: `Gambar QR Code ${fileName} tidak ditemukan` });
+        }
+    } catch (err) {
+        logg(false, `Gagal menghapus gambar QR Code ${fileName}, error: ${err.message}`)
+        res.json({ success: false, message: `Gagal menghapus gambar QR Code ${fileName}` });
     }
 });
 

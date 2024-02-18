@@ -16,6 +16,7 @@
     "moment-timezone": "^0.5.45",
     "node-routeros": "^1.6.9",
     "path": "^0.12.7",
+    "qrcode": "^1.5.3",
     "socket.io": "^4.7.4"
   }
 }

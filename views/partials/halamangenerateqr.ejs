@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="/static/styles/<%= halaman %>.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <div class="halaman-index">
     <div class="header-container">
         <h3>Generate Qr</h3>
@@ -5,5 +8,44 @@
             <button class="btn btn-primary btn-tambah-akun" onclick="tampilkangenerateqrwifi()">QR WiFi</button>
             <button class="btn btn-primary btn-tambah-akun" onclick="tampilkangenerateqrlogin()">QR Login Hotspot</button>
         </div>
+    </div>
+
+    <div class="qrwifi" id="qrwifi" style="display: none;">
+        <div class="menu">
+            <h6>Form Generate QR</h6>
+            <br>
+            <div class="qrwifiForm">
+                <form id="qrwifiForm" class="row">
+                    <div class="col">
+                        <div class="form mb-1">
+                            <label for="ssid">SSID:</label>
+                            <input type="text" id="ssid" name="ssid" required class="form-control">
+                        </div>
+                        <div class="form mb-1">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required class="form-control">
+                        </div>
+                        <div class="form mb-1">
+                            <button type="submit" class="btn btn-primary">Generate QR Code</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="qrwifiimg" id="qrwifiimg" style="display: none;">
+            <div class="column-container imgqr">
+                <img id="qrCodeImage" src="" alt="WiFi QR Code">
+            </div>
+            <div class="column-container btnimg">
+                <button onclick="downloadQR()" class="btn btn-primary">Unduh QR Code</button>
+                <button onclick="startHapusQRWIFI()" class="btn btn-danger">Hapus QR</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="qrlogin" id="qrlogin" style="display: none;">
+        HALO
     </div>
 </div>
