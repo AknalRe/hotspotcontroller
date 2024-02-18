@@ -702,8 +702,8 @@
                             var namaCell = document.createElement('td');
                             namaCell.textContent = item.name;
 
-                            var divisiCell = document.createElement('td');
-                            divisiCell.textContent = item.parent;
+                            // var divisiCell = document.createElement('td');
+                            // divisiCell.textContent = item.parent || ``;
 
                             var targetCell = document.createElement('td');
                             targetCell.textContent = item.target.replace("/32", "");
@@ -754,7 +754,7 @@
 
                             row.appendChild(countCell);
                             row.appendChild(namaCell);
-                            row.appendChild(divisiCell);
+                            // row.appendChild(divisiCell);
                             row.appendChild(targetCell);
                             row.appendChild(prioCell);
                             row.appendChild(maxlimitCell);
@@ -772,7 +772,7 @@
                     statusCell.textContent = "Tidak ada akun yang aktif";
                     statusCell.style.textAlign = "center";
                     statusCell.style.color = "red";
-                    statusCell.colSpan = 9;
+                    statusCell.colSpan = 8;
                     row.appendChild(statusCell);
                     tbody.appendChild(row);
                 }
@@ -953,7 +953,7 @@
                 const identity = data.name
                 document.getElementById('info-mikrotik-identity').textContent = `Nama Mikrotik : ${identity}`;
             })
-            
+
             socket.on('resource', function(data) {
                 // console.log(data);
                 document.getElementById('info-mikrotik-uptime').textContent = " " + formatUptime(data.uptime);
