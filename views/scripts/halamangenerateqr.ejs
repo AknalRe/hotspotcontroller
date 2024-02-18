@@ -1,17 +1,20 @@
 <script>
     let divqrwifi = document.getElementById('qrwifi').style;
     let divqrlogin = document.getElementById('qrlogin').style;
+    let divinfoqr = document.getElementById('infoqr').style;
     let divqrwifiimg = document.getElementById('qrwifiimg').style;
     const qrCodeImage = document.getElementById('qrCodeImage');
-    let fileName = qrCodeImage.src.split('/').pop();
+    let fileName = '';
 
     function tampilkangenerateqrwifi() {
+        divinfoqr.display = 'none';
         divqrwifiimg.display = 'none';
         divqrlogin.display = 'none';
         divqrwifi.display = 'block';
     }
 
     function tampilkangenerateqrlogin() {
+        divinfoqr.display = 'none';
         divqrwifiimg.display = 'none';
         divqrwifi.display = 'none';
         divqrlogin.display = 'block';
@@ -22,7 +25,6 @@
     }
 
     function HapusQRWiFI(fileName) {
-        console.log(`TestHapus`);
         const formData = {
             fileName: fileName,
         };
@@ -39,6 +41,8 @@
                 if (data.success) {
                     showNotification(data.success, data.message);
                     document.getElementById('qrwifiimg').style.display = 'none';
+                    document.getElementById('ssid').value = '';
+                    document.getElementById('password').value = '';
                 } else {
                     showNotification(data.success, data.message);
                 }
@@ -53,6 +57,10 @@
         const ssid = document.getElementById('ssid').value;
         const password = document.getElementById('password').value;
 
+        if (!password) {
+            return showNotification(false, `Password tidak boleh kosong`);
+        }
+
         // Kirim data form ke backend menggunakan fetch API
         fetch('/generateQRCode', {
             method: 'POST',
@@ -63,9 +71,11 @@
         })
             .then(response => response.json())
             .then(data => {
+                showNotification(data.success, data.message);
                 // Menampilkan QR code dengan mengubah properti src dari elemen gambar
                 document.getElementById('qrCodeImage').src = `/static/images/${data.url}.png`;
                 document.getElementById('qrCodeImage').alt = `${data.url}`;
+                fileName = `${data.url}`
                 document.getElementById('qrwifiimg').style.display = 'block';
             })
             .catch(error => {
@@ -74,10 +84,11 @@
     });
 
     function downloadQR() {
+        const qrCodeImage = document.getElementById('qrCodeImage');
         const downloadLink = document.createElement('a');
         downloadLink.href = qrCodeImage.src;
 
-        downloadLink.download = fileName;
+        downloadLink.download = fileName + ".png";
 
         document.body.appendChild(downloadLink);
         downloadLink.click();

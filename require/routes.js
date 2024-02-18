@@ -333,9 +333,14 @@ router.post('/editqueue', isAuthenticated, async (req, res) => {
 
 router.post('/generateQRCode', isAuthenticated, async(req, res) => {
     const { ssid, password } = req.body;
-    const wifiUri = `WIFI:T:WPA;S:${ssid};P:${password};;`
-    const nama = `${ssid}_QRCode`
-    const path = `./views/images/${nama}.png`
+    let wifiUri;
+    if (password) {
+        wifiUri = `WIFI:T:WPA;S:${ssid};P:${password};;`;
+    } else {
+        wifiUri = `WIFI:T:NONE;S:${ssid};;`;
+    }
+    const nama = `${ssid}_QRCode`;
+    const path = `./views/images/${nama}.png`;
     try {
         qr.toFile(
             path,
@@ -343,14 +348,16 @@ router.post('/generateQRCode', isAuthenticated, async(req, res) => {
             { errorCorrectionLevel: 'H', scale: 8 }, // Mengatur resolusi dengan opsi scale
             function (err) {
                 if (err) throw err;
-                console.log(`QR Code berhasil disimpan sebagai ${ssid}_QRCode.png`);
+                logg(true, `QR Code berhasil disimpan sebagai ${ssid}_QRCode.png`);
             }
         );
-        res.json({ success: true, message: `Berhasil generate QR WiFi ${ssid}`, url: `${nama}`})
+        logg(true, `Berhasil generate QR WiFi (${ssid})`);
+        res.json({ success: true, message: `Berhasil generate QR WiFi (${ssid})`, url: `${nama}`});
     } catch (err) {
-        res.json({ success: false, message: `Gagal generate QR WiFi ${ssid}`, url: `${nama}`})
+        logg(false, `Gagal generate QR WiFi (${ssid}), error: ${err.message}`);
+        res.json({ success: false, message: `Gagal generate QR WiFi (${ssid}), error: ${err.message}`, url: `${nama}`});
     }
-})
+});
 
 router.post('/deleteQRCode', isAuthenticated, async (req, res) => {
     const { fileName } = req.body;

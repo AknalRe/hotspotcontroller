@@ -895,7 +895,7 @@
                         countCell.style.width = '30px';
 
                         var serverCell = document.createElement('td');
-                        serverCell.textContent = item.server;
+                        serverCell.textContent = item.server || `all`;
 
                         var addressCell = document.createElement('td');
                         addressCell.textContent = item.address;

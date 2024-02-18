@@ -7,13 +7,18 @@
         <div class="list-menu-flex">
             <button class="btn btn-primary btn-tambah-akun" onclick="tampilkangenerateqrwifi()">QR WiFi</button>
             <button class="btn btn-primary btn-tambah-akun" onclick="tampilkangenerateqrlogin()">QR Login Hotspot</button>
+            <a href="/" class="btn btn-danger btn-tambah-akun">Home</a>
         </div>
     </div>
+    
+    <div class="infoqr" id="infoqr">
+        <p style="text-align: justify; max-width: 500px; margin-top: 50px;">Menu Generate QR memudahkan pengguna atau operator. QR pengguna WiFi dapat dipindai untuk terhubung dengan jaringan. </p>
+    </div>
+    
 
     <div class="qrwifi" id="qrwifi" style="display: none;">
         <div class="menu">
             <h6>Form Generate QR</h6>
-            <br>
             <div class="qrwifiForm">
                 <form id="qrwifiForm" class="row">
                     <div class="col">
@@ -23,7 +28,7 @@
                         </div>
                         <div class="form mb-1">
                             <label for="password">Password:</label>
-                            <input type="password" id="password" name="password" required class="form-control">
+                            <input type="text" id="password" name="password" class="form-control">
                         </div>
                         <div class="form mb-1">
                             <button type="submit" class="btn btn-primary">Generate QR Code</button>
@@ -45,7 +50,7 @@
     </div>
     
 
-    <div class="qrlogin" id="qrlogin" style="display: none;">
-        HALO
+    <div class="qrlogin" id="qrlogin" style="display: none; text-align: center; margin-top: 50px;">
+        SOON
     </div>
 </div>
