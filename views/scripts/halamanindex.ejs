@@ -472,14 +472,17 @@
 
         let divtambahakun = document.getElementById('tambah-hotspot').style;
         let divlistakun = document.getElementById('list-akun-hotspot').style;
-        let divakunaktif = document.getElementById('info-user-aktif').style;
-        let divqueueakun = document.getElementById('info-queue-user').style;
-        let divhosthotspot = document.getElementById('info-lease-user').style;
-        let divbinding = document.getElementById('info-binding-user').style;
     </script>
     <% if (role=='Administrator' ) { %>
         <script>
+            let divakunaktif = document.getElementById('info-user-aktif').style;
+            let divqueueakun = document.getElementById('info-queue-user').style;
+            let divhosthotspot = document.getElementById('info-lease-user').style;
+            let divbinding = document.getElementById('info-binding-user').style;
+            let infomikrotik = document.getElementById('info-device-mikrotik').style;
+
             function tampilkanlisthotspot() {
+                infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
                 divqueueakun.display = 'none';
@@ -496,9 +499,11 @@
                 divakunaktif.display = 'none';
                 divlistakun.display = 'none';
                 divtambahakun.display = 'block';
+                infomikrotik.display = 'block';
             }
 
             function tampilkanuseraktif() {
+                infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
                 divqueueakun.display = 'none';
@@ -508,6 +513,7 @@
             }
 
             function tampilkanuserqueue() {
+                infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
                 divakunaktif.display = 'none';
@@ -517,6 +523,7 @@
             }
 
             function tampilkanleaseclient() {
+                infomikrotik.display = 'none';
                 divqueueakun.display = 'none';
                 divakunaktif.display = 'none';
                 divlistakun.display = 'none';
@@ -526,6 +533,7 @@
             }
 
             function listbindinguser() {
+                infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divqueueakun.display = 'none';
                 divakunaktif.display = 'none';
@@ -933,18 +941,12 @@
                 }
             });
 
-
-            const listakunhotspot = document.getElementById('list-akun-hotspot') //.style.display = 'block'
-            const useraktif = document.getElementById('info-user-aktif') // .style.display = 'block'
-            const queue = document.getElementById('info-queue-user') // .style.display = 'block'
-            const client = document.getElementById('info-lease-user') // .style.display = 'block'
-            const binding = document.getElementById('info-binding-user') // .style.display = 'block'
             document.getElementById('info-device-mikrotik').style.display = 'none';
             setTimeout(() => {
-                if (listakunhotspot.style.display == 'block' || useraktif.style.display == 'block' || queue.style.display == 'block' || client.style.display == 'block' || binding.style.display == 'block') {
-                    document.getElementById('info-device-mikrotik').style.display = 'none';
+                if (divlistakun.display == 'block' || divakunaktif.display == 'block' || divqueueakun.display == 'block' || divhosthotspot.display == 'block' || divbinding.display == 'block') {
+                    infomikrotik.display = 'none';
                 } else {
-                    document.getElementById('info-device-mikrotik').style.display = 'block';
+                    infomikrotik.display = 'block';
                 }
             }, 6000);
             
@@ -1016,20 +1018,19 @@
                 })
             });
         </script>
-        <% } else { %>
-            <script>
+    <% } else { %>
+        <script>
+            function tampilkanlisthotspot() {
+                divtambahakun.display = 'none';
+                listhotspot();
+                divlistakun.display = 'block';
+            }
 
-                function tampilkanlisthotspot() {
-                    divtambahakun.display = 'none';
-                    listhotspot();
-                    divlistakun.display = 'block';
-                }
-
-                function tampilkantambahhotspot() {
-                    divlistakun.display = 'none';
-                    divtambahakun.display = 'block';
-                }
-            </script>
-            <% } %>
-                <% } else { %>
-                    <% } %>
+            function tampilkantambahhotspot() {
+                divlistakun.display = 'none';
+                divtambahakun.display = 'block';
+            }
+        </script>
+    <% } %>
+<% } else { %>
+<% } %>
