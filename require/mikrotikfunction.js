@@ -136,8 +136,34 @@ async function editakun(usernamelama, id, username, jenisakun, password) {
     }
 }
 
+async function cekbinding(add, mac) {
+    const { mikrotikstatus } = Mikrotik;
+    try {
+        if (mikrotikstatus) {
+            const response = await client.write('/ip/hotspot/ip-binding/print', [
+                '?address=' + add,
+                '?mac-address=' + mac,
+            ]);
+            if (response.length > 0) {
+                logg(true, `Data binding mac (${mac}) ditemukan`);
+                return { success: true, id: response[0]['.id'] };
+            } else {
+                logg(false, `Data binding mac (${mac}) tidak di temukan`);
+                return { success: false };
+            }
+        } else {
+            logg(false, `Mikrotik tidak terhubung`);
+            return { success: false };
+        }
+    } catch (err) {
+        logg(false, `Terjadi kesalahan cekbinding, error: ${err.message}`);
+        return { success: false };
+    }
+}
+
 module.exports = {
     checkakun,
     addakun,
     editakun,
+    cekbinding,
 }

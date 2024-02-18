@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="/static/styles/<%= halaman %>.css">
+<div class="form-login">
+    <h3><%= title %></h3>
+
+    <div class="login-form" id="login-form">
+        <form id="login-post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+    
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+    
+            <input type="submit" value="Login" />
+        </form>
+        <!-- <button class="btn btn-lupa-akun" onclick="tampilkanFormLupaAkun()">Lupa Akun</button> -->
+    </div>
+
+    <div class="form-lupa-akun" id="form-lupa-akun">
+        <form id="lupa-akun">
+            <label for="reset-username">Masukkan Username:</label>
+            <input type="text" id="reset-username" name="reset-username" required>
+    
+            <label for="security-code">Masukkan Kode Keamanan:</label>
+            <div class="flex-container">
+                <div>
+                    <input type="password" id="security-code" name="security-code">
+                </div>
+                <div>
+                    <button class="btn btn-kirim-kode" onclick="kirimKode()">Kirim Kode</button>
+                </div>
+            </div>
+    
+            <!-- Mengubah input type dari submit menjadi button -->
+            <button type="button" onclick="resetForm()">Reset</button>
+        </form>
+    
+        <button class="btn btn-kembali-login" onclick="tampilkanFormLogin()">Kembali ke Login</button>
+    </div>
+
+    <div class="logger-info" id="logger-info"> 
+        
+    </div>
+</div>

@@ -1,7 +1,7 @@
 const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main');
 const { KirimPesanWA, kirimNotif, notif } = require('./whatsapp');
 const { router, isAuthenticated } = require('./server');
-const { addakun, editakun } = require('./mikrotikfunction');
+const { addakun, editakun, cekbinding } = require('./mikrotikfunction');
 const { client } = require('./mikrotik');
 const fs = require('fs');
 const path = require('path');
@@ -319,6 +319,55 @@ router.post('/editqueue', isAuthenticated, async (req, res) => {
     }
 });
 
+router.post('/binding', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    const { action, id, add, toadd, mac, server } = req.body;
+    try {
+        if (mikrotikstatus) {
+            const response = await cekbinding(add, mac);
+            if (!response.success) {
+                await client.write('/ip/hotspot/ip-binding/add', [
+                    "=comment=" + `${moment().format("DD/MMMM/YYYY - hh:mm:ss")} - ${name}/${role}`,
+                    "=address=" + add,
+                    "=to-address=" + toadd,
+                    '=mac-address=' + mac,
+                    '=server=' + server,
+                    '=type=bypassed',
+                    '=disabled=false',
+                ]);
+                logg(true, `Berhasil binding akun ${add}-${mac}`);
+                await notif(req.hostname, req.session.username, req.session.role, `Berhasil binding akun ${add}-${mac}`);
+                res.json({ success: true, message: `Berhasil binding akun ${add}-${mac}`});
+            } else {
+                if (action) {
+                    await client.write('/ip/hotspot/ip-binding/set', [
+                        '=.id=' + response.id,
+                        "=disabled=true",
+                    ])
+                    logg(true, `Berhasil nonaktifkan binding akun ${add}-${mac}`);
+                    await notif(req.hostname, req.session.username, req.session.role, `Berhasil nonaktifkan binding akun ${add}-${mac}`);
+                    res.json({ success: true, message: `Berhasil nonaktifkan binding akun ${add}-${mac}`});
+                } else {
+                    await client.write('/ip/hotspot/ip-binding/set', [
+                        '=.id=' + response.id,
+                        "=disabled=false",
+                    ])
+                    logg(true, `Berhasil mengaktifkan binding akun ${add}-${mac}`);
+                    await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengaktifkan binding akun ${add}-${mac}`);
+                    res.json({ success: true, message: `Berhasil mengaktifkan binding akun ${add}-${mac}`});
+                }
+            }
+        } else {
+            logg(false, `Mikrotik tidak terhubung`)
+            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+        }
+    } catch (err) {
+        logg(false, `Terjadi kesalahan saat mencoba binding akun, error: ${err.message}`);
+        res.json({ success: false, message: `Error binding akun ${add}-${mac}`, response: err});
+    }
+});
+
 // router.post('/generateQRCode', isAuthenticated, async(req, res) => {
 //     const { ssid, password } = req.body;
 //     const wifiUri = `WIFI:T:WPA;S:${ssid};P:${password};;`;
@@ -361,7 +410,7 @@ router.post('/generateQRCode', isAuthenticated, async(req, res) => {
 
 router.post('/deleteQRCode', isAuthenticated, async (req, res) => {
     const { fileName } = req.body;
-    console.log(fileName);
+    // console.log(fileName);
     const imagePath = path.join(__dirname, '..', 'views', 'images', `${fileName}.png`);
 
     try {
