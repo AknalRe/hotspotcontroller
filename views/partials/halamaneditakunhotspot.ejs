@@ -1,0 +1,52 @@
+<!-- <%= response %> -->
+<!-- <script>
+    const response = "<%= response.response %>"
+    console.log(JSON.stringify(response));
+</script> -->
+<link rel="stylesheet" href="/static/styles/<%= halaman %>.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<% if (role) { %>
+    <div class="halaman-edit-akun">
+        <% if (mikrotikstatus === false ) { %>
+            <div class="mikrotik-status">
+                <h5>Mikrotik Terputus, Hubungi Admin <a href="https://wa.me/6285155431301">085155431301</a></h5>
+            </div>
+        <% } %>
+
+        <% if (success == true) { %>
+            <div class="form-edit-akun-hotspot">
+                <h4>Edit Akun (<%= response.name %>)</h4>
+                <br>
+                <form id="editakunhotspot" action="/editakunhotspot" method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username" value="<%= response.name %>" required>
+                            </div>
+                        </div>
+                        <div class="col" id="formpassword">
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="text" class="form-control" id="password" name="password" value="<%= response.password %>">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="jenisAkun">Jenis Akun:</label>
+                                <select class="form-control" id="jenisAkun" name="jenisAkun" required>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <br>
+                    <p style="color: red; background-color: black;">Untuk perubahan jenis akun/profile ke (Tamu), mohon untuk username dan password wajib sama.</p> -->
+                    <br>
+                    <button type="submit" class="btn btn-danger btn-edit-akun">Ubah Akun</button>
+                    <a href="/" class="btn btn-primary btn-kembali" style="margin-left: 10px;">Kembali</a>
+                </form>
+            </div>
+        <% } %>
+    </div>
+<% } %>

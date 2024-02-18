@@ -1,0 +1,16 @@
+.mikrotik-status {
+    background: black;
+    color: red;
+}
+
+.form-edit-akun-hotspot {
+    display: flex;
+    flex-direction: column; /* Tumpuk elemen dalam kolom */
+    align-items: center; /* Pusatkan secara horizontal */
+    justify-content: center; /* Pusatkan secara vertikal */
+}
+
+/* Tengahkan teks dalam elemen h4 */
+.form-edit-akun-hotspot h4 {
+    text-align: center;
+}

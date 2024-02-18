@@ -1,6 +1,7 @@
 .header-container {
     display: flex;
     justify-content: space-between;
+    align-content: center;
     align-items: center;
     padding: 5px;
     margin-bottom: 30px;
@@ -44,25 +45,6 @@
         flex-direction: column;
     }
 }
-
-/* Media query untuk lebar layar lebih dari 756px */
-/* @media (min-width: 770px) {
-    .form-container {
-        width: 100vh;
-    }
-    .form-control {
-        width: 100%;
-    }
-} */
-
-/* @media (min-width: 950px) {
-    .form-container {
-        width: 100vh;
-    }
-    .form-control {
-        width: 100%;
-    }
-} */
 
 .table-container {
     max-width: 100%;

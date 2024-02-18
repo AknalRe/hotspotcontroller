@@ -1,0 +1,98 @@
+<script>
+    // Fungsi untuk menambahkan nilai input
+    function incrementValue(inputId) {
+        var input = document.getElementById(inputId);
+        var newValue = parseInt(input.value) + 1;
+        if (newValue <= parseInt(input.max)) {
+            input.value = newValue;
+        }
+    }
+
+    // Fungsi untuk mengurangi nilai input
+    function decrementValue(inputId) {
+        var input = document.getElementById(inputId);
+        var newValue = parseInt(input.value) - 1;
+        if (newValue >= parseInt(input.min)) {
+            input.value = newValue;
+        }
+    }
+
+    // Menangani penambahan dan pengurangan nilai untuk input prioritas upload
+    document.getElementById('btnAddUpload').addEventListener('click', function() {
+        incrementValue('uploadPrioritas');
+    });
+    document.getElementById('btnSubtractUpload').addEventListener('click', function() {
+        decrementValue('uploadPrioritas');
+    });
+
+    // Menangani penambahan dan pengurangan nilai untuk input prioritas download
+    document.getElementById('btnAddDownload').addEventListener('click', function() {
+        incrementValue('downloadPrioritas');
+    });
+    document.getElementById('btnSubtractDownload').addEventListener('click', function() {
+        decrementValue('downloadPrioritas');
+    });
+
+    function konversiNilai(nilai) {
+        if (nilai >= 1000000) {
+            return (nilai / 1000000) + " Mbps";
+        } else {
+            return (nilai / 1000) + " Kbps";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('limit').addEventListener('input', function() {
+            var limitValue = parseInt(this.value);
+            var nilaiSpan = document.getElementById('nilai1');
+            nilaiSpan.textContent = "Nilai : " + konversiNilai(limitValue);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('limit2').addEventListener('input', function() {
+            var limitValue = parseInt(this.value);
+            var nilaiSpan = document.getElementById('nilai2');
+            nilaiSpan.textContent = "Nilai : " + konversiNilai(limitValue);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('editakunhotspot').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nama = "<%= response.name %>";
+            const id = '<%= response[".id"] %>';
+            const uploadprio = document.getElementById('uploadPrioritas').value;
+            const downloadprio = document.getElementById('downloadPrioritas').value;
+            const prio = uploadprio + "/" + downloadprio; // Perbaikan: Tambahkan tanda '+' yang hilang di sini
+            const uploadlimit = document.getElementById('limit').value;
+            const downloadlimit = document.getElementById('limit2').value;
+            const limit = uploadlimit + "/" + downloadlimit; // Perbaikan: Tambahkan tanda '+' yang hilang di sini
+
+            const formData = {
+                nama: nama,
+                id: id,
+                prio: prio,
+                maxlimit: limit,
+            };
+
+            fetch('/editqueue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle respon dari server sesuai kebutuhan
+                console.log(data);
+                showNotification(data.success, data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>

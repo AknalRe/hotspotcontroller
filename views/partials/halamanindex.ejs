@@ -20,6 +20,7 @@
         <div class="tambah-hotspot" id="tambah-hotspot">
             <div class="list-menu-flex">
                 <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <a href="/generateqr" class="btn btn-primary btn-tambah-akun">Generate Qr</a>
             </div>
             <div class="form-container">
                 <h6>Tambah Akun</h6>
@@ -61,7 +62,7 @@
             </div>
             <div class="form-container">
                 <div class="header-container">
-                    <h4>List Akun Hotspot</h4>
+                    <h5>List Akun Hotspot</h5>
                     <h5 id="info-akun-aktif"></h5>
                 </div>
                 <div class="table-container">
@@ -78,6 +79,145 @@
                             </tr>
                         </thead>
                         <tbody class="custom-table-body-listhotspotuser">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-user-aktif" id="info-user-aktif" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuserqueue()">Bandwidth Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanleaseclient()">List Client</button>
+                <!-- <a href="/detail" class="btn btn-primary btn-tambah-akun">Detail Bandwidth Akun</a> -->
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h4>List Aktif Akun</h4>
+                    <div class="list-btn-aktif-akun">
+                        <button class="btn btn-danger" onclick="logoutkansemua()">Logoutkan Semua</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-akun-aktif">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>Username</th>
+                                <th>Divisi</th>
+                                <th>IP Address</th>
+                                <th>Pemakaian (Down/Up)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listakunaktif">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-queue-user" id="info-queue-user" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanleaseclient()">List Client</button>
+                <!-- <a href="/detail" class="btn btn-primary btn-tambah-akun">Detail Bandwidth Akun</a> -->
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h5>List Limitasi Akun Aktif</h5>
+                    <!-- <div class="header-container list-btn-aktif-akun">
+                        <button class="btn btn-danger" onclick="logoutkansemua()">Logoutkan Semua</button>
+                    </div> -->
+                </div>
+                <div class="table-container">
+                    <table class="table-list-queue-aktif">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>Username</th>
+                                <th>Divisi</th>
+                                <th>IP Address</th>
+                                <th>Prioritas (Up/Down)</th>
+                                <th>Limit (Up/Down)</th>
+                                <th>Trafik Berjalan (Up/Down)</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listqueueaktif">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-lease-user" id="info-lease-user" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuserqueue()">Bandwidth Akun Aktif</button>
+                <!-- <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button> -->
+                <!-- <a href="/detail" class="btn btn-primary btn-tambah-akun">Detail Bandwidth Akun</a> -->
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h5>List Client Tidak Login</h5>
+                    <div class="list-btn-aktif-akun">
+                        <button class="btn btn-danger" onclick="listbindinguser()">List Binding Client</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-host-aktif">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>WiFi</th>
+                                <th>IP Address</th>
+                                <th>Mac Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listhost">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-binding-user" id="info-binding-user" style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanleaseclient()">Kembali List Client</button>
+                <!-- <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuserqueue()">Bandwidth Akun Aktif</button> -->
+                <!-- <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanuseraktif()">Detail Akun Aktif</button> -->
+                <!-- <a href="/detail" class="btn btn-primary btn-tambah-akun">Detail Bandwidth Akun</a> -->
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h5>List Client Binding</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-binding">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>WiFi</th>
+                                <th>IP Address</th>
+                                <th>Mac Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-listbinding">
                         </tbody>
                     </table>
                 </div>

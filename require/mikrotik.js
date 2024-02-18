@@ -1,5 +1,6 @@
 const { logg, Mikrotik } = require('./main');
 const { RouterOSAPI } = require('node-routeros');
+// const { startsocket } = require('./socket');
 
 let mikrotikerror = 0;
 let cekstatusinterval;
@@ -26,7 +27,7 @@ async function connect(){
         Mikrotik.mikrotikstatus = true;
         Mikrotik.mikrotikidentity = (await client.write('/system/identity/print'))[0].name;
         // console.log(Mikrotik.mikrotikidentity);
-        logg(true, `Mikrotik berhasil terhubung`)
+        logg(true, `Mikrotik berhasil terhubung`);
         return { success: true, message: `Mikrotik berhasil terhubung`}
     } catch (err){
         Mikrotik.mikrotikstatus = false;
@@ -63,7 +64,7 @@ async function status(){
     try {
         await client.write("/interface/print");
         Mikrotik.mikrotikidentity = (await client.write('/system/identity/print'))[0].name;
-        return { success: true, message: "Koneksi dengan Mikrotik tetap aktif" };
+        return { success: true, message: "Koneksi dengan Mikrotik terhubung" };
     } catch (err){
         return { success: false, message: "Koneksi dengan Mikrotik terputus", response: err };
     }

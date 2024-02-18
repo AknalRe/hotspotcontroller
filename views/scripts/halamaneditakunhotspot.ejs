@@ -1,0 +1,120 @@
+
+
+<script>
+    // Fungsi untuk memperbarui opsi pada elemen <select>
+    function updateJenisAkunOptions() {
+        fetch('/infoprofilhotspot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            // Jika ada data yang perlu dikirimkan, tambahkan ke bagian body
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Hapus semua opsi saat ini
+            const selectElement = document.getElementById('jenisAkun');
+            selectElement.innerHTML = "";
+
+            // Tambahkan opsi baru dari hasil respons server
+            const optionElement = document.createElement('option');
+            optionElement.value = "<%= response.profile %>";
+            optionElement.textContent = "<%= response.profile.includes('Tamu') ? response.profile.replace('-2Mbps', '') : response.profile  %>";
+            selectElement.appendChild(optionElement);
+            data.response.forEach(option => {
+                if (option.name !== "<%= response.profile %>") {
+                    const optionElement = document.createElement('option');
+                    if (option.name.includes("Tamu")) {
+                        optionElement.textContent = option.name.replace("-2Mbps", "");
+                    } else {
+                        optionElement.textContent = option.name;
+                    }
+                    optionElement.value = option.name;
+                    selectElement.appendChild(optionElement);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        updateJenisAkunOptions();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('editakunhotspot').addEventListener('submit', function (event) {
+            event.preventDefault(); // Menghentikan pengiriman formulir default
+
+            // Mengumpulkan data formulir
+            const usernamelama = "<%= response.name %>";
+            const id = '<%= response[".id"] %>';
+            const profile = '<%= response.profile %>';
+            const passwordlama = '<%= response.password %>';
+            // console.log(usernamelama);
+            // console.log(id);
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const jenisAkun = document.getElementById('jenisAkun').value;
+
+            if (username == usernamelama && password == passwordlama && jenisAkun == profile) {
+                notifALL(false, `Tidak terdapat perubahan data, proses dibatalkan.`);
+                return
+            }
+
+            // Menyiapkan data untuk dikirim sebagai JSON
+            const formData = {
+                usernamelama: usernamelama,
+                id: id,
+                username: username,
+                password: password,
+                jenisAkun: jenisAkun,
+            };
+
+            // Mengirim permintaan POST menggunakan fetch API
+            fetch('/editakunhotspot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle respon dari server sesuai kebutuhan
+                console.log(data);
+                showNotification(data.success, data.successwa == true ? `${data.message} & Berhasil mengirimkan pesan whatsapp` : data.message);
+                if(data.success) {
+                    // document.getElementById('username').value = '';
+                    // document.getElementById('password').value = '';
+                    // document.getElementById('jenisAkun').value = '';
+                    // document.getElementById('bandwidth').value = '';
+                }
+                // Tambahan logika atau tindakan lainnya
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    function togglePasswordVisibility() {
+        var jenisAkun = document.getElementById("jenisAkun");
+        var passwordField = document.getElementById("formpassword");
+        if (jenisAkun.value === "Tamu") {
+            passwordField.style.display = "none";
+            passwordField.value = undefined;
+            console.log(passwordField.value);
+        } else {
+            passwordField.style.display = "block";
+            passwordField.value = "<%= response.password %>";
+            console.log(passwordField.value);
+        }
+    }
+
+    document.getElementById("jenisAkun").addEventListener("change", function() {
+        togglePasswordVisibility();
+    });
+</script>

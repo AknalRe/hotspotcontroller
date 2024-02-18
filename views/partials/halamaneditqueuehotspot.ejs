@@ -1,0 +1,77 @@
+<link rel="stylesheet" href="/static/styles/<%= halaman %>.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<% if (role) { %>
+    <div class="halaman-edit-akun">
+        <% if (mikrotikstatus === false ) { %>
+            <div class="mikrotik-status">
+                <h5>Mikrotik Terputus, Hubungi Admin <a href="https://wa.me/6285155431301">085155431301</a></h5>
+            </div>
+        <% } %>
+
+        <% if (success == true) { %>
+            <div class="form-edit-akun-hotspot">
+                <h4>Edit Queue Limit (<%= response.name %>)</h4>
+                <br>
+                <form id="editakunhotspot" action="/editakunhotspot" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <p style="text-align: center;">Prioritas</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="uploadPrioritas">Upload:</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="uploadPrioritas" name="uploadPrioritas" value="<%= response.priority.split("/")[0] %>" min="1" max="8" required>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" id="btnAddUpload">+</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="btnSubtractUpload">-</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="downloadPrioritas">Download:</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="downloadPrioritas" name="downloadPrioritas" value="<%= response.priority.split("/")[1] %>" min="1" max="8" required>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" id="btnAddDownload">+</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="btnSubtractDownload">-</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <P>Nilai 1 = prioritas antrian paling awal<br>Nilai 8 = prioritas antrian paling akhir</P>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <p style="text-align: center;">Limit</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="limit">Upload:</label>
+                                        <input type="text" class="form-control" id="limit" name="limit" value="<%= response['max-limit'].split('/')[0] %>" required>
+                                        <p>
+                                            <span id="nilai1"></span>
+                                        </p>
+                                    </div>
+                                    <div class="col">
+                                        <label for="limit2">Download:</label>
+                                        <input type="text" class="form-control" id="limit2" name="limit2" value="<%= response['max-limit'].split('/')[1] %>" required>
+                                        <p>
+                                            <span id="nilai2"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <button type="submit" class="btn btn-danger btn-edit-akun">Ubah Queue Akun</button>
+                    <a href="/" class="btn btn-primary btn-kembali" style="margin-left: 10px;">Kembali</a>
+                </form>
+            </div>
+                       
+        <% } %>
+    </div>
+<% } %>

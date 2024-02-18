@@ -95,7 +95,49 @@ async function addakun(username, jenisakun, password) {
     }
 }
 
+async function editakun(usernamelama, id, username, jenisakun, password) {
+    // console.log(usernamelama, id, username, jenisakun, password)
+    const { mikrotikstatus } = Mikrotik;
+    if (mikrotikstatus) {
+        try {
+            let newpassword = password ? password : username;
+            const isnumber = await testINT(usernamelama);
+
+            await client.write('/ip/hotspot/user/set', [
+                "=.id=" + id,
+                "=name=" + username,
+                "=password=" + newpassword,
+                "=profile=" + jenisakun,
+            ])
+
+            let isAkunHotspotAvailable = await checkakun(username);
+            if (isAkunHotspotAvailable) {
+                logg(true, `Data (${usernamelama}) berhasil di ubah ke data baru`);
+                let response, nomortujuan, ucapan, pesan;
+                if (isnumber) {
+                    nomortujuan = usernamelama;
+                    ucapan = await getUcapan();
+                    const wifi = jenisakun.toLowerCase().includes("clarice") ? "WiFi Clarice" : jenisakun.toLowerCase().includes("haicantik") ? "WiFi Haicantik" : "WiFi"
+                    pesan = `${ucapan}\n\nBerikut kami informasi data perubahan akun untuk login pada ${wifi} :\n\nUsername : ${username}${password ? `\nPassword : ${password}` : ''}\n\nHarap untuk login sesuai dengan data diatas.\nTerima Kasih`;
+                    response = await KirimPesanWA(nomortujuan, pesan);
+                }
+                return response.success ? { success: true, successwa: false, message: `Data akun (${usernamelama}) berhasil di ubah ke data baru`} : { success: true, successwa: true, message: `Data akun (${usernamelama}) berhasil di ubah ke data baru`};
+            } else {
+                logg(false, `Data akun (${usernamelama}) gagal di ubah`);
+                return { success: false, message: `Data akun (${usernamelama}) gagal di ubah`}
+            }
+        } catch (err) {
+            logg(false, `Terjadi Kesalahan : ${err.message}`);
+            return { success: false, message: `Terjadi Kesalahan : ${err.message}`}
+        }
+    } else {
+        logg(false, `Mikrotik Tidak Terhubung`);
+        return { success: false, message: `Mikrotik Tidak Terhubung`}
+    }
+}
+
 module.exports = {
     checkakun,
     addakun,
+    editakun,
 }

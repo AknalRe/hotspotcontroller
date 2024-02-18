@@ -4,6 +4,8 @@ const title = process.env.TITLE;
 const author = process.env.AUTHOR;
 const nomorwa = process.env.NOMORWA;
 const hostname = process.env.HOSTNAME;
+const timeout1 = parseInt(process.env.TIMEOUT1);
+const timeout2 = parseInt(process.env.TIMEOUT2);
 
 const fs = require('fs');
 const path = require('path');
@@ -79,4 +81,6 @@ module.exports = {
     title,
     author,
     nomorwa,
+    timeout1,
+    timeout2,
 }

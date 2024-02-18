@@ -1,7 +1,7 @@
 const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main');
 const { KirimPesanWA, kirimNotif, notif } = require('./whatsapp');
 const { router, isAuthenticated } = require('./server');
-const { addakun } = require('./mikrotikfunction');
+const { addakun, editakun } = require('./mikrotikfunction');
 const { client } = require('./mikrotik');
 
 // GET Route
@@ -13,6 +13,59 @@ router.get('/', isAuthenticated, async (req, res) => {
     res.render("index", { author, title, username, role, mikrotikstatus, nomorwa, name, page: "Home", halaman: "halamanindex", message: "" })
 });
 
+router.get('/editakunhotspot/:id', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    const { id } = req.params;
+
+    try {
+        if (mikrotikstatus) {
+            const response = await client.write('/ip/hotspot/user/print', [
+                '?.id=' + id,
+            ]);
+
+            // console.log(response);
+
+            const responseData = response.length > 1 ? response : response[0];
+
+            // console.log(responseData);
+            
+            res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: `Edit (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData});
+        } else {
+            res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: "", message: "", username, role, mikrotikstatus, nomorwa, name, success: false, response: `Mikrotik Tidak Terkoneksi` });
+        }
+    } catch (err) {
+        res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: "", message: "", username, role, mikrotikstatus, nomorwa, name, success: false, error: err.message });
+    }
+});
+
+router.get('/editqueue/:id', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    const { id } = req.params;
+
+    try {
+        if (mikrotikstatus) {
+            const response = await client.write('/queue/simple/print', [
+                '?.id=' + id,
+            ]);
+
+            const responseData = response.length > 1 ? response : response[0];
+            
+            res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData});
+        } else {
+            res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: `Mikrotik Tidak Terkoneksi` });
+        }
+    } catch (err) {
+        res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, error: err.message });
+    }
+})
+
+router.get('/generateqr', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    res.render('index', { author, title, halaman: "halamangenerateqr", page: `Generate QRcode`, message: "", username, role, mikrotikstatus})
+});
 
 // POST Route
 
@@ -56,7 +109,9 @@ router.post('/login', async (req, res) => {
 });
 
 router.post("/logout", isAuthenticated, async (req, res) => {
-    const ip = req ? req.ip : 'unknown';
+    const ip = req.headers['x-forwarded-for']
+    ? `${req.headers['x-forwarded-for']}`
+    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`
     const username = req.session.username;
     try {
         req.session.destroy();
@@ -158,7 +213,7 @@ router.post('/deleteakunhotspot', isAuthenticated, async (req, res) => {
             await client.write("/ip/hotspot/user/remove", [
                 "=.id=" + id,
             ]);
-            await notif(req.hostname, req.session.username, req.session.role, `Berhasil menghapus user ${nama}`)
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil menghapus user ${nama}`);
             logg(true, `(${req.session.username}) Berhasil menghapus user (${nama})`);
             res.json({success: true, message: `Berhasil menghapus user (${nama})`});
         } catch (err) {
@@ -169,6 +224,97 @@ router.post('/deleteakunhotspot', isAuthenticated, async (req, res) => {
         res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
     }
 })
+
+router.post('/editakunhotspot', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { usernamelama, id, username, password, jenisAkun } = req.body;
+    // console.log(usernamelama, id, username, password, jenisAkun)
+    const ip = req.headers['x-forwarded-for']
+    ? `${req.headers['x-forwarded-for']}`
+    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`;
+    const response = await editakun(usernamelama, id, username, jenisAkun, password);
+    if (response.success) {
+        await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengubah data akun ${usernamelama} menjadi ${username}-${jenisAkun}`);
+        res.json(response);
+    } else {
+        res.json(response);
+    }
+})
+
+router.post('/logoutkansemua', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    try {
+        if (mikrotikstatus) {
+            let aktifuser;
+
+            aktifuser = await client.write('/ip/hotspot/active/print');
+
+            let count = 0;
+            await Promise.all(aktifuser.map(async user => {
+                // console.log(`${count}. ${user['.id']}`);
+                await client.write('/ip/hotspot/active/remove', [
+                        '=.id=' + user['.id'],
+                    ]);
+                count++;
+            }));
+            logg(true, `Berhasil melogout (${count}) user`);
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil melogout (${count}) user`);
+            res.json({ success: true, message: `Berhasil melogout (${count}) user`});
+        } else {
+            logg(false, `Mikrotik tidak terhubung`)
+            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+        }
+    } catch(err) {
+        logg(false, `Error melogout semua user, error: ${err.message}`)
+        res.json({ success: false, message: `Error melogout semua user, error: ${err.message}` });
+    }
+})
+
+router.post('/logoutakunhotspot', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { id, nama } = req.body;
+    try {
+        if (mikrotikstatus) {
+            let aktifuser;
+
+            aktifuser = await client.write('/ip/hotspot/active/remove', [
+                "=.id=" + id,
+            ])
+            logg(true, `Berhasil melogout (${nama}) user`);
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil melogout (${nama}) user`);
+            res.json({ success: true, message: `Berhasil melogout (${nama}) user`});
+        } else {
+            logg(false, `Mikrotik tidak terhubung`);
+            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+        }
+    } catch(err) {
+        logg(false, `Error melogout (${nama}) user, error: ${err.message}`);
+        res.json({ success: false, message: `Error melogout (${nama}) user, error: ${err.message}`});
+    }
+})
+
+router.post('/editqueue', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { nama, id, prio, maxlimit } = req.body;
+
+    try {
+        if (mikrotikstatus) {
+            await client.write('/queue/simple/set', [
+                "=.id=" + id,
+                "=priority=" + prio,
+                "=max-limit=" + maxlimit,
+            ])
+            logg(true, `Berhasil mengubah queue (${nama} : ${id})`)
+            res.json({ success: true, message: `Berhasil mengubah queue (${nama} : ${id})` });
+        } else {
+            logg(false, `Mikrotik tidak terhubung` )
+            res.json({ success: false, message: `Mikrotik tidak terhubung` });
+        }
+    } catch (err) {
+        logg(false, `Error mengedit queue ${nama}, error: ${err.message}`);
+        res.json({ success: false, message: `Error mengedit queue ${nama}, error: ${err.message}` });
+    }
+});
 
 router.use((req, res) => {
   const prevpage = req.session.prevpage || '/';

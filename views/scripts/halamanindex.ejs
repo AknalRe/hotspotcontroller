@@ -87,7 +87,7 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('tambahAkunForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
@@ -108,22 +108,22 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                showNotification(data.success, data.successwa == true ? `${data.message} & Berhasil mengirimkan pesan whatsapp` : data.message);
-                if(data.success) {
-                    document.getElementById('username').value = '';
-                    document.getElementById('password').value = '';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    showNotification(data.success, data.successwa == true ? `${data.message} & Berhasil mengirimkan pesan whatsapp` : data.message);
+                    if (data.success) {
+                        document.getElementById('username').value = '';
+                        document.getElementById('password').value = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     })
 
-    document.getElementById("jenisAkun").addEventListener("change", function() {
+    document.getElementById("jenisAkun").addEventListener("change", function () {
         togglePasswordVisibility();
     });
 
@@ -141,10 +141,8 @@
 
 
 <% if (mikrotikstatus) { %>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        let divtambahakun = document.getElementById('tambah-hotspot').style;
-        let divlistakun = document.getElementById('list-akun-hotspot').style;
-
         function listhotspot() {
             fetch('/hotspotuserlist', {
                 method: 'POST',
@@ -152,17 +150,17 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                // Handle respon dari server sesuai kebutuhan
-                // console.log(data);
-        
-                // Tampilkan data ke dalam tabel
-                displayDataInTable(data);
-            })
-            .catch(error => {
-                console.log('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // Handle respon dari server sesuai kebutuhan
+                    // console.log(data);
+
+                    // Tampilkan data ke dalam tabel
+                    displayDataInTable(data);
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
         }
 
         function displayDataInTable(data) {
@@ -174,11 +172,11 @@
                 data.forEach(item => {
                     count++
                     var row = document.createElement('tr');
-                
+
                     var countCell = document.createElement('td');
                     countCell.textContent = count + ".";
                     countCell.style.width = '30px';
-                
+
                     var nameCell = document.createElement('td');
                     nameCell.textContent = item.name;
 
@@ -258,54 +256,54 @@
                 if (data.length > 0) {
                     data.forEach(item => {
                         if (item.name !== "HaiCantikTamu") {
-                        count++
-                        var row = document.createElement('tr');
-                    
-                        var countCell = document.createElement('td');
-                        countCell.textContent = count + ".";
-                        countCell.style.width = '30px';
-                    
-                        var nameCell = document.createElement('td');
-                        nameCell.textContent = item.name;
+                            count++
+                            var row = document.createElement('tr');
 
-                        // var passwordCell = document.createElement('td');
-                        // passwordCell.textContent = item.password;
+                            var countCell = document.createElement('td');
+                            countCell.textContent = count + ".";
+                            countCell.style.width = '30px';
 
-                        // var profileCell = document.createElement('td');
-                        // profileCell.textContent = item.profile;
+                            var nameCell = document.createElement('td');
+                            nameCell.textContent = item.name;
 
-                        var statusCell = document.createElement('td');
-                        let status = item.disabled === 'false' ? 'Aktif' : 'Tidak Aktif';
-                        statusCell.style.color = item.disabled === 'false' ? 'blue' : 'red';
-                        if (item["bytes-in"] > 0 && item["bytes-out"] > 0) {
-                            statusCell.textContent = status + " / Sudah digunakan";
-                        } else {
-                            // statusCell.style.color = "black"
-                            statusCell.textContent = status + " / Belum digunakan";
-                        }
-                        // statusCell.textContent = status
+                            // var passwordCell = document.createElement('td');
+                            // passwordCell.textContent = item.password;
 
-                        var actionCell = document.createElement('td')
-                        // actionCell.textContent = "SOON";
+                            // var profileCell = document.createElement('td');
+                            // profileCell.textContent = item.profile;
 
-                        var nonaktifkanButton = document.createElement('button');
-                        nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-warning');
-                        nonaktifkanButton.textContent = item.disabled === "false" ? "Nonaktifkan" : "Aktifkan";
-                        nonaktifkanButton.style.margin = '5px';
-                        nonaktifkanButton.addEventListener('click', function () {
-                            nonaktifkanakunhotspot(item['.id'], item.disabled === "false" ? "true" : "false", item.name)
-                        })
+                            var statusCell = document.createElement('td');
+                            let status = item.disabled === 'false' ? 'Aktif' : 'Tidak Aktif';
+                            statusCell.style.color = item.disabled === 'false' ? 'blue' : 'red';
+                            if (item["bytes-in"] > 0 && item["bytes-out"] > 0) {
+                                statusCell.textContent = status + " / Sudah digunakan";
+                            } else {
+                                // statusCell.style.color = "black"
+                                statusCell.textContent = status + " / Belum digunakan";
+                            }
+                            // statusCell.textContent = status
 
-                        actionCell.appendChild(nonaktifkanButton)
+                            var actionCell = document.createElement('td')
+                            // actionCell.textContent = "SOON";
 
-                        row.appendChild(countCell);
-                        row.appendChild(nameCell);
-                        // row.appendChild(passwordCell);
-                        // row.appendChild(profileCell);
-                        row.appendChild(statusCell);
-                        row.appendChild(actionCell);
+                            var nonaktifkanButton = document.createElement('button');
+                            nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-warning');
+                            nonaktifkanButton.textContent = item.disabled === "false" ? "Nonaktifkan" : "Aktifkan";
+                            nonaktifkanButton.style.margin = '5px';
+                            nonaktifkanButton.addEventListener('click', function () {
+                                nonaktifkanakunhotspot(item['.id'], item.disabled === "false" ? "true" : "false", item.name)
+                            })
 
-                        tbody.appendChild(row);
+                            actionCell.appendChild(nonaktifkanButton)
+
+                            row.appendChild(countCell);
+                            row.appendChild(nameCell);
+                            // row.appendChild(passwordCell);
+                            // row.appendChild(profileCell);
+                            row.appendChild(statusCell);
+                            row.appendChild(actionCell);
+
+                            tbody.appendChild(row);
                         }
                     })
                 } else {
@@ -320,7 +318,7 @@
                 }
             }
         }
-        
+
         function nonaktifkanakunhotspot(id, status, nama) {
             const formData = {
                 id: id,
@@ -334,15 +332,15 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data);
-                showNotification(data.success, data.message);
-                listhotspot()
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                    listhotspot()
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         function deleteakunhotspot(id, nama) {
@@ -357,45 +355,598 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data);
-                showNotification(data.success, data.message);
-                listhotspot()
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                    listhotspot()
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
+
+        function logoutkansemua() {
+            fetch('/logoutkansemua', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function bindingakun(action, id, add, toadd, mac, server) {
+            const formData = {
+                action: action,
+                id: id,
+                add: add,
+                toadd: toadd,
+                mac: mac,
+                server: server,
+            }
+            fetch('/binding', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function hapusbindingakun(action, id) {
+            const formData = {
+                action: action,
+                id: id,
+            }
+            fetch('/hapusbindingakun', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function logoutkansemua() {
+            fetch('/logoutkansemua', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function logoutakunhotspot(id, nama) {
+            const formData = {
+                id: id,
+                nama: nama,
+            }
+            fetch('/logoutakunhotspot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    showNotification(data.success, data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        let divtambahakun = document.getElementById('tambah-hotspot').style;
+        let divlistakun = document.getElementById('list-akun-hotspot').style;
+        let divakunaktif = document.getElementById('info-user-aktif').style;
+        let divqueueakun = document.getElementById('info-queue-user').style;
+        let divhosthotspot = document.getElementById('info-lease-user').style;
+        let divbinding = document.getElementById('info-binding-user').style;
     </script>
-    <% if (role == 'Administrator') { %>
+    <% if (role=='Administrator' ) { %>
         <script>
-
             function tampilkanlisthotspot() {
+                divhosthotspot.display = 'none';
+                divbinding.display = 'none';
+                divqueueakun.display = 'none';
+                divakunaktif.display = 'none';
                 divtambahakun.display = 'none';
                 listhotspot();
                 divlistakun.display = 'block';
             }
 
             function tampilkantambahhotspot() {
+                divhosthotspot.display = 'none';
+                divbinding.display = 'none';
+                divqueueakun.display = 'none';
+                divakunaktif.display = 'none';
                 divlistakun.display = 'none';
                 divtambahakun.display = 'block';
             }
-        </script>
-    <% } else { %>
-        <script>
 
-            function tampilkanlisthotspot() {
+            function tampilkanuseraktif() {
+                divhosthotspot.display = 'none';
+                divbinding.display = 'none';
+                divqueueakun.display = 'none';
+                divlistakun.display = 'none';
                 divtambahakun.display = 'none';
-                listhotspot();
-                divlistakun.display = 'block';
+                divakunaktif.display = 'block';
             }
 
-            function tampilkantambahhotspot() {
+            function tampilkanuserqueue() {
+                divhosthotspot.display = 'none';
+                divbinding.display = 'none';
+                divakunaktif.display = 'none';
                 divlistakun.display = 'none';
-                divtambahakun.display = 'block';
+                divtambahakun.display = 'none';
+                divqueueakun.display = 'block';
             }
+
+            function tampilkanleaseclient() {
+                divqueueakun.display = 'none';
+                divakunaktif.display = 'none';
+                divlistakun.display = 'none';
+                divtambahakun.display = 'none';
+                divbinding.display = 'none';
+                divhosthotspot.display = 'block';
+            }
+
+            function listbindinguser() {
+                divhosthotspot.display = 'none';
+                divqueueakun.display = 'none';
+                divakunaktif.display = 'none';
+                divlistakun.display = 'none';
+                divtambahakun.display = 'none';
+                divbinding.display = 'block';
+            }
+
+            var socket = io();
+
+            socket.on('useraktif', function (data) {
+                const infoaktif = document.getElementById('info-akun-aktif');
+
+                var tbody = document.querySelector('.custom-table-body-listakunaktif');
+                tbody.innerHTML = '';
+                if (data) {
+                    // console.log(data);
+                    let jumlahData = 0;
+
+                    // Menangani baik array maupun non-array
+                    if (Array.isArray(data)) {
+                        jumlahData = data.length;
+                    } else {
+                        jumlahData = data ? 1 : 0;
+                    }
+
+                    // Menambahkan logika untuk menangani jika data tidak ada atau jumlahData sama dengan 0
+                    if (jumlahData > 0) {
+                        infoaktif.textContent = `${jumlahData} Akun hotspot aktif`;
+                    } else {
+                        infoaktif.textContent = `${jumlahData} hotspot yang aktif`;
+                    }
+                    var count = 0;
+                    if (Array.isArray(data)) {
+                        data.forEach(function (item) {
+                            count++
+                            var row = document.createElement('tr');
+
+                            var countCell = document.createElement('td');
+                            countCell.textContent = count + ".";
+                            countCell.style.width = '30px';
+
+                            var nameCell = document.createElement('td');
+                            nameCell.textContent = item.user;
+
+                            var divisiCell = document.createElement('td');
+                            divisiCell.textContent = item.server;
+
+                            var addressCell = document.createElement('td');
+                            addressCell.textContent = item.address;
+
+                            var pemakaianCell = document.createElement('td');
+                            if (item["bytes-in"] > 0 && item["bytes-out"] > 0) {
+                                let download = formatkuota(item["bytes-out"]);
+                                let upload = formatkuota(item["bytes-in"]);
+                                if (download.includes("GB") || upload.includes("GB")) {
+                                    pemakaianCell.style.color = "blue"
+                                }
+                                pemakaianCell.textContent = download + " / " + upload;
+                            } else {
+                                pemakaianCell.style.color = 'red';
+                                pemakaianCell.textContent = "0 Kbps / 0 Kbps";
+                            }
+
+                            // var trafikCell = document.createElement('td');
+                            // trafikCell.textContent = "SOON"
+
+                            var actionCell = document.createElement('td');
+                            var nonaktifButton = document.createElement('button');
+                            nonaktifButton.classList.add('btn', 'btn-vpn-hapus', 'btn-danger');
+                            nonaktifButton.textContent = 'Logoutkan';
+                            nonaktifButton.style.margin = '5px';
+                            nonaktifButton.addEventListener('click', function () {
+                                logoutakunhotspot(item['.id'], item.user);
+                            });
+
+                            actionCell.appendChild(nonaktifButton)
+
+                            row.appendChild(countCell);
+                            row.appendChild(nameCell);
+                            row.appendChild(divisiCell);
+                            row.appendChild(addressCell);
+                            row.appendChild(pemakaianCell);
+                            // row.appendChild(trafikCell);
+                            row.appendChild(actionCell);
+
+                            tbody.appendChild(row);
+                        });
+                    } else {
+                        count++;
+                        var row = document.createElement('tr');
+
+                        var countCell = document.createElement('td');
+                        countCell.textContent = count + ".";
+                        countCell.style.width = '30px';
+
+                        var nameCell = document.createElement('td');
+                        nameCell.textContent = data.user;
+
+                        var divisiCell = document.createElement('td');
+                        divisiCell.textContent = data.server;
+
+                        var addressCell = document.createElement('td');
+                        addressCell.textContent = data.address;
+
+                        var pemakaianCell = document.createElement('td');
+                        if (data["bytes-in"] > 0 && data["bytes-out"] > 0) {
+                            let download = formatkuota(data["bytes-out"]);
+                            let upload = formatkuota(data["bytes-in"]);
+                            if (download.includes("GB") || upload.includes("GB")) {
+                                pemakaianCell.style.color = "blue"
+                            }
+                            pemakaianCell.textContent = download + " / " + upload;
+                        } else {
+                            pemakaianCell.style.color = 'red';
+                            pemakaianCell.textContent = "0 Kbps / 0 Kbps";
+                        }
+
+                        // var trafikCell = document.createElement('td');
+                        // trafikCell.textContent = "SOON"
+
+                        var actionCell = document.createElement('td');
+                        var nonaktifButton = document.createElement('button');
+                        nonaktifButton.classList.add('btn', 'btn-vpn-hapus', 'btn-danger');
+                        nonaktifButton.textContent = 'Logoutkan';
+                        nonaktifButton.style.margin = '5px';
+                        nonaktifButton.addEventListener('click', function () {
+                            logoutakunhotspot(data['.id'], data.user);
+                        });
+
+                        actionCell.appendChild(nonaktifButton)
+
+                        row.appendChild(countCell);
+                        row.appendChild(nameCell);
+                        row.appendChild(divisiCell);
+                        row.appendChild(addressCell);
+                        row.appendChild(pemakaianCell);
+                        // row.appendChild(trafikCell);
+                        row.appendChild(actionCell);
+
+                        tbody.appendChild(row);
+                    }
+                } else {
+                    var row = document.createElement('tr');
+                    var statusCell = document.createElement('td');
+                    statusCell.textContent = "Tidak ada akun yang aktif";
+                    statusCell.style.textAlign = "center";
+                    statusCell.style.color = "red";
+                    statusCell.colSpan = 8;
+                    infoaktif.textContent = "Tidak ada akun yang aktif";
+                    row.appendChild(statusCell);
+                    tbody.appendChild(row);
+                }
+            });
+
+            socket.on('queue', function (data) {
+                // console.log(data);
+                var tbody = document.querySelector('.custom-table-body-listqueueaktif');
+                tbody.innerHTML = '';
+                let count = 0;
+                let dataqueue = false;
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item) {
+                        if (item.parent === "1.4. Selain" && item.name !== item.target.replace("/32", "")) {
+                            dataqueue = true;
+                            count++;
+                            var row = document.createElement('tr');
+
+                            var countCell = document.createElement('td');
+                            countCell.textContent = count + ".";
+                            countCell.style.width = '30px';
+
+                            var namaCell = document.createElement('td');
+                            namaCell.textContent = item.name;
+
+                            var divisiCell = document.createElement('td');
+                            divisiCell.textContent = item.parent;
+
+                            var targetCell = document.createElement('td');
+                            targetCell.textContent = item.target.replace("/32", "");
+
+                            var prioCell = document.createElement('td');
+                            prioCell.textContent = item.priority;
+
+                            var maxlimitCell = document.createElement('td');
+                            maxlimitCell.textContent = formatValue(item['max-limit']);
+
+                            var rates = item.rate.split("/");
+                            var uploadRate = parseFloat(rates[0]);
+                            var downloadRate = parseFloat(rates[1]);
+
+                            var uploadSpeed, downloadSpeed;
+                            if (uploadRate >= 1000000) {
+                                uploadSpeed = (uploadRate / 1000000).toFixed(2) + " Mbps";
+                            } else {
+                                uploadSpeed = (uploadRate / 1000).toFixed(2) + " kbps";
+                            }
+
+                            if (downloadRate >= 1000000) {
+                                downloadSpeed = (downloadRate / 1000000).toFixed(2) + " Mbps";
+                            } else {
+                                downloadSpeed = (downloadRate / 1000).toFixed(2) + " kbps";
+                            }
+
+                            var formattedRate = uploadSpeed + " / " + downloadSpeed;
+
+                            var pemakaianCell = document.createElement('td');
+                            pemakaianCell.textContent = formattedRate;
+
+                            var statusCell = document.createElement('td');
+                            statusCell.textContent = item.disabled == "false" ? "Aktif" : "Tidak Aktif";
+
+                            var actionCell = document.createElement('td');
+                            var editForm = document.createElement('form');
+                            editForm.method = 'GET';
+                            editForm.action = `/editqueue/${item['.id']}`;
+                            var editButton = document.createElement('button');
+                            editButton.style.margin = '5px';
+                            editButton.type = 'submit';
+                            editButton.textContent = 'Edit';
+                            editButton.className = 'btn btn-primary';
+                            editForm.appendChild(editButton);
+
+                            actionCell.appendChild(editForm);
+
+                            row.appendChild(countCell);
+                            row.appendChild(namaCell);
+                            row.appendChild(divisiCell);
+                            row.appendChild(targetCell);
+                            row.appendChild(prioCell);
+                            row.appendChild(maxlimitCell);
+                            row.appendChild(pemakaianCell);
+                            row.append(statusCell);
+                            row.appendChild(actionCell);
+                            tbody.appendChild(row);
+                        }
+                    });
+                }
+
+                if (!dataqueue) {
+                    var row = document.createElement('tr');
+                    var statusCell = document.createElement('td');
+                    statusCell.textContent = "Tidak ada akun yang aktif";
+                    statusCell.style.textAlign = "center";
+                    statusCell.style.color = "red";
+                    statusCell.colSpan = 9;
+                    row.appendChild(statusCell);
+                    tbody.appendChild(row);
+                }
+            });
+
+            function formatValue(value) {
+                if (value === "0/0") {
+                    return "Tanpa Batas";
+                } else {
+                    const parts = value.split('/');
+                    const firstPart = parts[0];
+                    const secondPart = parts[1];
+                    const numericValue1 = parseFloat(firstPart);
+                    const numericValue2 = parseFloat(secondPart);
+                    let formattedValue1, formattedValue2;
+
+                    if (numericValue1 >= 1000000) {
+                        formattedValue1 = (numericValue1 / 1000000).toFixed(0) + " Mbps";
+                    } else {
+                        formattedValue1 = (numericValue1 / 1000).toFixed(0) + " Kbps";
+                    }
+
+                    if (numericValue2 >= 1000000) {
+                        formattedValue2 = (numericValue2 / 1000000).toFixed(0) + " Mbps";
+                    } else {
+                        formattedValue2 = (numericValue2 / 1000).toFixed(0) + " Kbps";
+                    }
+
+                    return formattedValue1 + " / " + formattedValue2;
+                }
+            }
+
+            socket.on('host', function (data) {
+                // console.log(data);
+                var tbody = document.querySelector('.custom-table-body-listhost');
+                tbody.innerHTML = '';
+                let count = 0;
+                let dataqueue = false;
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item) {
+                        if (item.authorized == "false") {
+                            dataqueue = true;
+                            count++;
+                            var row = document.createElement('tr');
+
+                            var countCell = document.createElement('td');
+                            countCell.textContent = count + ".";
+                            countCell.style.width = '30px';
+
+                            var serverCell = document.createElement('td');
+                            serverCell.textContent = item.server;
+
+                            var addressCell = document.createElement('td');
+                            addressCell.textContent = item.address;
+
+                            var macCell = document.createElement('td');
+                            macCell.textContent = item['mac-address'];
+
+                            var statusCell = document.createElement('td');
+                            statusCell.textContent = item.bypassed == "false" ? "Belum Login / Tidak Terbinding" : "Terbinding";
+
+                            var actionCell = document.createElement('td');
+
+                            // if (item.bypassed === "true") {
+                            //     actionCell.textContent = "Sudah Aktif";
+                            //     actionCell.style.color = "black";
+                            //     actionCell.style.fontWeight = "bold";
+                            //     actionCell.style.pointerEvents = "none"; // Mengatur agar tombol tidak dapat diklik
+                            // } else {
+                            //     var nonaktifkanButton = document.createElement('button');
+                            //     nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-danger');
+                            //     nonaktifkanButton.textContent = "Bypasskan";
+                            //     nonaktifkanButton.style.margin = '5px';
+                            //     nonaktifkanButton.addEventListener('click', function () {
+                            //         bindingakun(item['.id'], item.address, item["to-address"], item['mac-address'], item.server)
+                            //     });
+
+                            //     actionCell.appendChild(nonaktifkanButton);
+                            // }
+
+                            var nonaktifkanButton = document.createElement('button');
+                            nonaktifkanButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-danger');
+                            nonaktifkanButton.textContent = item.bypassed == "false" ? "Binding" : "Lepas Binding";
+                            nonaktifkanButton.style.margin = '5px';
+                            nonaktifkanButton.addEventListener('click', function () {
+                                bindingakun(item.bypassed == "false" ? false : true, item['.id'], item.address, item["to-address"], item['mac-address'], item.server)
+                            });
+
+                            actionCell.appendChild(nonaktifkanButton);
+
+                            row.appendChild(countCell);
+                            row.appendChild(serverCell);
+                            row.appendChild(addressCell);
+                            row.appendChild(macCell);
+                            row.appendChild(statusCell);
+                            row.appendChild(actionCell);
+
+                            tbody.appendChild(row);
+                        }
+                    })
+                }
+            });
+
+            socket.on('binding', function (data) {
+                // console.log(data);
+                var tbody = document.querySelector('.custom-table-body-listbinding');
+                tbody.innerHTML = '';
+                let count = 0;
+                let dataqueue = false;
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item) {
+                        dataqueue = true;
+                        count++;
+                        var row = document.createElement('tr');
+
+                        var countCell = document.createElement('td');
+                        countCell.textContent = count + ".";
+                        countCell.style.width = '30px';
+
+                        var serverCell = document.createElement('td');
+                        serverCell.textContent = item.server;
+
+                        var addressCell = document.createElement('td');
+                        addressCell.textContent = item.address;
+
+                        var macCell = document.createElement('td');
+                        macCell.textContent = item['mac-address'];
+
+                        var statusCell = document.createElement('td');
+                        statusCell.textContent = item.disabled == "false" ? "Terbinding/Aktif" : "Terbinding/Tidak Aktif";
+                        if (item.disabled == "true") {
+                            statusCell.style.color = 'red'
+                        }
+
+                        var actionCell = document.createElement('td');
+
+                        var hapusButton = document.createElement('button');
+                        hapusButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-danger');
+                        hapusButton.textContent = item.disabled == "false" ? "Nonaktifkan" : "Aktifkan";
+                        hapusButton.style.margin = '5px';
+                        hapusButton.addEventListener('click', function () {
+                            hapusbindingakun(item.disabled, item[".id"])
+                        });
+
+                        actionCell.appendChild(hapusButton);
+
+                        row.appendChild(countCell);
+                        row.appendChild(serverCell);
+                        row.appendChild(addressCell);
+                        row.appendChild(macCell);
+                        row.appendChild(statusCell);
+                        row.appendChild(actionCell);
+
+                        tbody.appendChild(row);
+                    });
+                }
+            });
         </script>
-    <% } %>
-<% } else { %>
-<% } %>
+        <% } else { %>
+            <script>
+
+                function tampilkanlisthotspot() {
+                    divtambahakun.display = 'none';
+                    listhotspot();
+                    divlistakun.display = 'block';
+                }
+
+                function tampilkantambahhotspot() {
+                    divlistakun.display = 'none';
+                    divtambahakun.display = 'block';
+                }
+            </script>
+            <% } %>
+                <% } else { %>
+                    <% } %>
