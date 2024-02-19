@@ -55,6 +55,26 @@
     border-collapse: collapse;
 }
 
+.table-list-akun-aktif {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-list-queue-aktif {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-list-host-aktif {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-list-binding {
+    width: 100%;
+    border-collapse: collapse;
+}
+
 th, td {
     border: 1px solid #f8f8f8;
     padding: 8px;
