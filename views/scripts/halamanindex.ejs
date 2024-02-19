@@ -80,7 +80,7 @@
     function togglePasswordVisibility() {
         var jenisAkun = document.getElementById("jenisAkun");
         var passwordField = document.getElementById("formpassword");
-        if (jenisAkun.value.includes("Tamu")) {
+        if (jenisAkun.value.toLowerCase().includes("tamu")) {
             passwordField.style.display = "none";
         } else {
             passwordField.style.display = "block";

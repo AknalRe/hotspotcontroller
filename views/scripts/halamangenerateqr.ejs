@@ -77,6 +77,8 @@
             .then(data => {
                 showNotification(data.success, data.message);
                 // Menampilkan QR code dengan mengubah properti src dari elemen gambar
+                document.getElementById('btndownloadqrwifi').textContent = `Unduh QR ${ssid}`;
+                document.getElementById('btnhapusqrwifi').textContent = `Hapus QR ${ssid}`;
                 document.getElementById('qrCodeImage').src = `/static/images/${data.url}.png`;
                 document.getElementById('qrCodeImage').alt = `${data.url}`;
                 fileName = `${data.url}`;
