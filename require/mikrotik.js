@@ -64,7 +64,7 @@ async function status(){
     try {
         await client.write("/interface/print");
         Mikrotik.mikrotikidentity = (await client.write('/system/identity/print'))[0].name;
-        return { success: true, message: "Koneksi dengan Mikrotik terhubung" };
+        return { success: true, message: "Koneksi dengan Mikrotik masih terhubung" };
     } catch (err){
         return { success: false, message: "Koneksi dengan Mikrotik terputus", response: err };
     }

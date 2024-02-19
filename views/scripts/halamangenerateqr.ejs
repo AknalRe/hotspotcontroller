@@ -61,6 +61,10 @@
             return showNotification(false, `Password tidak boleh kosong`);
         }
 
+        if (password.length < 8) {
+            return showNotification(false, `Password minimal berjumlah 8 karakter`);
+        }
+
         // Kirim data form ke backend menggunakan fetch API
         fetch('/generateQRCode', {
             method: 'POST',
@@ -75,8 +79,10 @@
                 // Menampilkan QR code dengan mengubah properti src dari elemen gambar
                 document.getElementById('qrCodeImage').src = `/static/images/${data.url}.png`;
                 document.getElementById('qrCodeImage').alt = `${data.url}`;
-                fileName = `${data.url}`
+                fileName = `${data.url}`;
+                document.getElementById('password').value = '';
                 document.getElementById('qrwifiimg').style.display = 'block';
+                downloadQR();
             })
             .catch(error => {
                 console.error('Error:', error);
