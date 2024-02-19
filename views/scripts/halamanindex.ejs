@@ -698,7 +698,7 @@
 
                 if (data && data.length > 0) {
                     data.forEach(function (item) {
-                        if (item.parent === "1.4. Selain" && item.name !== item.target.replace("/32", "")) {
+                        if (item.parent.includes("Selain") && item.name !== item.target.replace("/32", "")) {
                             dataqueue = true;
                             count++;
                             var row = document.createElement('tr');
@@ -814,7 +814,7 @@
             }
 
             socket.on('host', function (data) {
-                // console.log(data);
+                console.log(data);
                 var tbody = document.querySelector('.custom-table-body-listhost');
                 tbody.innerHTML = '';
                 let count = 0;
