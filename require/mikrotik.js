@@ -1,5 +1,6 @@
 const { logg, Mikrotik } = require('./main');
 const { RouterOSAPI } = require('node-routeros');
+const { notifmikrotik } = require('./whatsapp');
 // const { startsocket } = require('./socket');
 
 let mikrotikerror = 0;
@@ -43,6 +44,7 @@ async function CekStatus() {
         logg(response.success, response.message);
         if (!response.success) {
             mikrotikerror++;
+            await notifmikrotik(`Mikrotik ${Mikrotik.mikrotikidentity} terputus/gagal terhubung`);
             response = await client.connect();
             if (!response.connected) {
                 if (mikrotikerror >= 3) {

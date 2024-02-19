@@ -98,15 +98,16 @@ router.post('/login', async (req, res) => {
             req.session.role = user.role;
             req.session.name = user.name;
             // console.log(req.session);
-            logg(true, `${ip} - Berhasil login username : ${username}`)
+            logg(true, `${ip} - Berhasil login username : ${username}`);
+            await notif(req.hostname, req.session.username, req.session.role, `${ip} - Berhasil login username : ${username}`);
             res.json({ success: true, message: 'Login berhasil!' });
         } else {
-            logg(false, `${ip} - Gagal login username : ${username}`)
-            res.json({ success: false, message: 'Login gagal. Periksa username dan password.' });
+            logg(false, `${ip} - Gagal login username : ${username}`);
+            res.json({ success: false, message: 'Login gagal. Periksa username dan password!' });
         }
     } catch (error) {
         console.error(error);
-        logg(false, `Terjadi kesalahan pada server. : ${error} - IP : ${ip}`)
+        logg(false, `${ip} - Terjadi kesalahan pada server, error : ${error.message}`)
         res.json({ success: false, message: 'Terjadi kesalahan pada server.' });
     }
 });

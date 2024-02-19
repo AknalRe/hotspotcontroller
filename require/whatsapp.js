@@ -87,8 +87,19 @@ async function notif(hostname, username, role, message) {
     }
 }
 
+async function notifmikrotik(message) {
+    let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\n\n\n*'${message}'*\nMohon segera dicek lebih lanjut!`
+    try {
+        const response = await kirimNotif(pesan);
+        return response
+    } catch (err) {
+        return { success: false, response: err.message}
+    }
+}
+
 module.exports = {
     KirimPesanWA,
     kirimNotif,
     notif,
+    notifmikrotik,
 };
