@@ -17,6 +17,7 @@ async function fetchDataMikrotik1() {
     host = host.length > 1 ? host : host[0];
     let binding = await client.write('/ip/hotspot/ip-binding/print');
     binding = binding.length > 1 ? binding : binding[0];
+    let loghotspot = await client.write('/log/print');
     io.sockets.emit('identity', identity[0]);
     io.sockets.emit('resource', resource[0]);
     io.sockets.emit('interface', interface);
@@ -25,6 +26,7 @@ async function fetchDataMikrotik1() {
     io.sockets.emit('queue', queue);
     io.sockets.emit('host', host);
     io.sockets.emit('binding', binding);
+    io.sockets.emit('loghotspot', loghotspot);
   } catch (err) {
       console.error('Kesalahan:', err);
   }

@@ -81,6 +81,11 @@ async function notif(hostname, username, role, message) {
     let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${hostname}\nMikrotik : ${Mikrotik.mikrotikidentity}\nUsername : ${username}\nRole : ${role}\nMessage : \n\n'${message}'`
     try {
         const response = await kirimNotif(pesan);
+        if (response.success) {
+            logg(true, `Berhasil mengirimkan notif ke admin`);
+        } else {
+            logg(false, `Gagal mengirimkan notif ke admin`);
+        }
         return response
     } catch (err) {
         return { success: false, response: err.message}
@@ -91,6 +96,11 @@ async function notifmikrotik(message) {
     let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\n\n\n*'${message}'*\nMohon segera dicek lebih lanjut!`
     try {
         const response = await kirimNotif(pesan);
+        if (response.success) {
+            logg(true, `Berhasil mengirimkan notif ke admin`);
+        } else {
+            logg(false, `Gagal mengirimkan notif ke admin`);
+        }
         return response
     } catch (err) {
         return { success: false, response: err.message}

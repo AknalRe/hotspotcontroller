@@ -814,7 +814,7 @@
             }
 
             socket.on('host', function (data) {
-                console.log(data);
+                // console.log(data);
                 var tbody = document.querySelector('.custom-table-body-listhost');
                 tbody.innerHTML = '';
                 let count = 0;
@@ -1016,6 +1016,10 @@
                     var totalGB = (totalBytes.toFixed(2)) + "GB";
                     document.getElementById('info-mikrotik-kuota').textContent = " " + totalGB;
                 })
+            });
+
+            socket.on('loghotspot', function(data) {
+                console.log(data);
             });
         </script>
     <% } else { %>
