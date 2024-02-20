@@ -237,6 +237,7 @@ router.post('/editakunhotspot', isAuthenticated, async (req, res) => {
     ? `${req.headers['x-forwarded-for']}`
     : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`;
     const response = await editakun(usernamelama, id, username, jenisAkun, password);
+    console.log(response)
     if (response.success) {
         await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengubah data akun ${usernamelama} menjadi ${username}-${jenisAkun}`);
         res.json(response);
