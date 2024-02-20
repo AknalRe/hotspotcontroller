@@ -60,7 +60,7 @@
             const jenisAkun = document.getElementById('jenisAkun').value;
 
             if (username == usernamelama && password == passwordlama && jenisAkun == profile) {
-                notifALL(false, `Tidak terdapat perubahan data, proses dibatalkan.`);
+                showNotification(false, `Tidak terdapat perubahan data, proses dibatalkan.`);
                 return
             }
 
