@@ -1,0 +1,27 @@
+# Mikrotik
+HOST=
+USER=
+PASSWD=
+PORTMIKROTIK=
+INTERVAL= # interval cek status koneksi mikrotik dalam satuan menit
+
+# Whatsapp Api
+LINKWA=
+LINKWA2=
+APIKEYWA=
+APIKEYWA2=
+
+# Whatsapp Komunitas untuk notif info
+IDKOMUNITAS=
+
+# Server configuration
+PORT=
+APIKEY=
+TITLE=
+AUTHOR=
+NOMORWA=
+HOSTNAME=
+
+# Mikrotik Timeout & Tulis dalam detik 
+TIMEOUT1=5
+TIMEOUT2=3
