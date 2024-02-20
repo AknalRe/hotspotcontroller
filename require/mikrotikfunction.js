@@ -111,7 +111,7 @@ async function editakun(usernamelama, id, username, jenisakun, password) {
             ])
 
             let isAkunHotspotAvailable = await checkakun(username);
-            if (isAkunHotspotAvailable) {
+            if (isAkunHotspotAvailable.success) {
                 logg(true, `Data (${usernamelama}) berhasil di ubah ke data baru`);
                 let response, nomortujuan, ucapan, pesan;
                 if (isnumber) {
