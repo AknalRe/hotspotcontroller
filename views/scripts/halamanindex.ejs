@@ -480,8 +480,10 @@
             let divhosthotspot = document.getElementById('info-lease-user').style;
             let divbinding = document.getElementById('info-binding-user').style;
             let infomikrotik = document.getElementById('info-device-mikrotik').style;
+            let divloghotspot = document.getElementById('info-log-hotspot').style;
 
             function tampilkanlisthotspot() {
+                divloghotspot.display = 'none';
                 infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
@@ -493,6 +495,7 @@
             }
 
             function tampilkantambahhotspot() {
+                divloghotspot.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
                 divqueueakun.display = 'none';
@@ -503,6 +506,7 @@
             }
 
             function tampilkanuseraktif() {
+                divloghotspot.display = 'none';
                 infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
@@ -513,6 +517,7 @@
             }
 
             function tampilkanuserqueue() {
+                divloghotspot.display = 'none';
                 infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divbinding.display = 'none';
@@ -523,6 +528,7 @@
             }
 
             function tampilkanleaseclient() {
+                divloghotspot.display = 'none';
                 infomikrotik.display = 'none';
                 divqueueakun.display = 'none';
                 divakunaktif.display = 'none';
@@ -533,6 +539,7 @@
             }
 
             function listbindinguser() {
+                divloghotspot.display = 'none';
                 infomikrotik.display = 'none';
                 divhosthotspot.display = 'none';
                 divqueueakun.display = 'none';
@@ -540,6 +547,17 @@
                 divlistakun.display = 'none';
                 divtambahakun.display = 'none';
                 divbinding.display = 'block';
+            }
+
+            function tampilkanloghotspot() {
+                infomikrotik.display = 'none';
+                divhosthotspot.display = 'none';
+                divqueueakun.display = 'none';
+                divakunaktif.display = 'none';
+                divlistakun.display = 'none';
+                divtambahakun.display = 'none';
+                divbinding.display = 'none';
+                divloghotspot.display = 'block';
             }
 
             var socket = io();
@@ -943,7 +961,7 @@
 
             document.getElementById('info-device-mikrotik').style.display = 'none';
             setTimeout(() => {
-                if (divlistakun.display == 'block' || divakunaktif.display == 'block' || divqueueakun.display == 'block' || divhosthotspot.display == 'block' || divbinding.display == 'block') {
+                if (divlistakun.display == 'block' || divakunaktif.display == 'block' || divqueueakun.display == 'block' || divhosthotspot.display == 'block' || divbinding.display == 'block' || divloghotspot.display == "block") {
                     infomikrotik.display = 'none';
                 } else {
                     infomikrotik.display = 'block';
@@ -1020,6 +1038,34 @@
 
             socket.on('loghotspot', function(data) {
                 console.log(data);
+                var tbody = document.querySelector('.custom-table-body-loghotspot');
+                tbody.innerHTML = '';
+                let count = 0;
+
+                data.forEach(function(item) {
+                    if (item.topics.includes('hotspot')) {
+                        dataqueue = true;
+                        count++;
+                        var row = document.createElement('tr');
+
+                        var countCell = document.createElement('td');
+                        countCell.textContent = count + ".";
+                        countCell.style.width = '30px';
+
+                        var timeCell = document.createElement('td');
+                        timeCell.textContent = item.time;
+
+                        var messageCell = document.createElement('td');
+                        messageCell.textContent = item.message;
+
+                        row.appendChild(countCell);
+                        row.appendChild(timeCell);
+                        row.appendChild(messageCell);
+                        
+                        tbody.appendChild(row);
+                    }
+                })
+
             });
         </script>
     <% } else { %>

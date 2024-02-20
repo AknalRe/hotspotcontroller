@@ -20,6 +20,7 @@
         <div class="tambah-hotspot" id="tambah-hotspot">
             <div class="list-menu-flex">
                 <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanloghotspot()">Log Hotspot</button>
                 <a href="/generateqr" class="btn btn-primary btn-tambah-akun">Generate Qr</a>
             </div>
             <div class="form-container">
@@ -211,6 +212,30 @@
                             </tr>
                         </thead>
                         <tbody class="custom-table-body-listbinding">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-log-hotspot" id="info-log-hotspot"  style="display: none;">
+            <div class="list-menu-flex">
+                <button class="btn btn-primary btn-tambah-akun" onclick="tampilkantambahhotspot()">Kembali Tambah Hostpot</button>
+            </div>
+            <div class="form-container">
+                <div class="header-container">
+                    <h5>Log Hotspot</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table-list-loghotspot">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th>Waktu</th>
+                                <th>Pesan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-table-body-loghotspot">
                         </tbody>
                     </table>
                 </div>

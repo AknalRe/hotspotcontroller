@@ -75,6 +75,23 @@
     border-collapse: collapse;
 }
 
+.table-list-loghotspot {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-list-loghotspot th,
+.table-list-loghotspot td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table-list-loghotspot tbody {
+    max-height: 50px;
+    overflow-y: auto;
+}
+
 th, td {
     border: 1px solid #f8f8f8;
     padding: 8px;
