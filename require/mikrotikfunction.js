@@ -86,8 +86,8 @@ async function addakun(username, jenisakun, password) {
                 return { success: false, message: `Username (${username}) gagal di buat`};
             }
         } catch (err) {
-            logg(false, `Terjadi Kesalahan : ${err.message}`);
-            return { success: false, message: `Terjadi Kesalahan : ${err.message}`}
+            logg(false, `Terjadi kesalahan tambah akun hotstpot : ${err.message}`);
+            return { success: false, message: `Terjadi kesalahan tambah akun hotstpot : ${err.message}`}
         }
     } else {
         logg(false, `Mikrotik Tidak Terhubung`);
@@ -113,7 +113,7 @@ async function editakun(usernamelama, id, username, jenisakun, password) {
             let isAkunHotspotAvailable = await checkakun(username);
             if (isAkunHotspotAvailable.success) {
                 logg(true, `Data (${usernamelama}) berhasil di ubah ke data baru`);
-                let response, nomortujuan, ucapan, pesan;
+                let response = { success: false }, nomortujuan, ucapan, pesan;
                 if (isnumber) {
                     nomortujuan = usernamelama;
                     ucapan = await getUcapan();
@@ -127,8 +127,8 @@ async function editakun(usernamelama, id, username, jenisakun, password) {
                 return { success: false, message: `Data akun (${usernamelama}) gagal di ubah`}
             }
         } catch (err) {
-            logg(false, `Terjadi Kesalahan : ${err.message}`);
-            return { success: false, message: `Terjadi Kesalahan : ${err.message}`}
+            logg(false, `Terjadi kesalahan edit akun hotspot : ${err.message}`);
+            return { success: false, message: `Terjadi kesalahan edit akun hotspot : ${err.message}`}
         }
     } else {
         logg(false, `Mikrotik Tidak Terhubung`);
