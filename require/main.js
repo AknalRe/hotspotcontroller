@@ -90,19 +90,19 @@ fs.readFile('.env', 'utf8', (err, envData) => {
     const copyEnvLines = envLines.map(line => {
         baris++;
         if (line.trim() !== "" && line.includes('=')) {
+            let command;
+            if (line.includes('#')) {
+                command = " # " + line.split(' # ')[1];
+            } else {
+                command = "";
+            }
             if (baris !== jmlhbaris) {
                 const key = line.split('=')[0];
                 // const value = line.split('=')[1];
-                let command;
-                if (line.includes('#')) {
-                    command = " #" + line.split(' #')[1];
-                } else {
-                    command = "";
-                }
-                return `${key}=""${command}\n`;
+                return `${key}= ${command}\n`;
             } else {
-                const [key] = line.split('=');
-                return `${key}`;
+                const key = line.split('=')[0];
+                return `${key}=${command}`;
             }
         } else {
             return line + '\n';
