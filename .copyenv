@@ -1,37 +1,37 @@
 # APP
-APP_DEBUG= 
-APP_ENV= 
+APP_DEBUG=
+APP_ENV=
 
 # User Login Default
-USERLG= 
-PASSLG=  # undefined
-ROLELG= 
-NAMELG= 
+USERLG=
+PASSLG=
+ROLELG=
+NAMELG=
 
 # Mikrotik
-HOST= 
-USER= 
-PASSWD=  # undefined
-PORTMIKROTIK= 
-INTERVAL=  # interval cek status koneksi mikrotik dalam satuan menit
+HOST=
+USER=
+PASSWD=
+PORTMIKROTIK=
+INTERVAL= # interval cek status koneksi mikrotik dalam satuan menit
 
 # Whatsapp Api
-LINKWA= 
-LINKWA2= 
-APIKEYWA=  # undefined
-APIKEYWA2= 
+LINKWA=
+LINKWA2=
+APIKEYWA=
+APIKEYWA2=
 
 # Whatsapp Komunitas untuk notif info
-IDKOMUNITAS= 
+IDKOMUNITAS=
 
 # Server configuration
-PORT= 
-APIKEY=  # undefined
-TITLE= 
-AUTHOR= 
-NOMORWA= 
-HOSTNAME= 
+PORT=
+APIKEY=
+TITLE=
+AUTHOR=
+NOMORWA=
+HOSTNAME=
 
 # Mikrotik Timeout & Tulis dalam detik 
-TIMEOUT1= 
+TIMEOUT1=
 TIMEOUT2=

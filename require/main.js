@@ -92,7 +92,7 @@ fs.readFile('.env', 'utf8', (err, envData) => {
         baris++;
         if (line.trim() !== "" && line.includes('=')) {
             let command;
-            if (line.includes('#')) {
+            if (line.includes(' # ')) {
                 command = " # " + line.split(' # ')[1];
             } else {
                 command = "";
@@ -100,7 +100,7 @@ fs.readFile('.env', 'utf8', (err, envData) => {
             if (baris !== jmlhbaris) {
                 const key = line.split('=')[0];
                 // const value = line.split('=')[1];
-                return `${key}= ${command}\n`;
+                return `${key}=${command}\n`;
             } else {
                 const key = line.split('=')[0];
                 return `${key}=${command}`;
