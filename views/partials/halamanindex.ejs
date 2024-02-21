@@ -17,6 +17,30 @@
     <% } %>
     <% if (role == "Administrator") { %>
 
+        <div class="form-container" id="info-device-mikrotik">
+            <div class="info-mikrotik">
+                <h5 id="info-mikrotik-identity"></h5>
+            </div>
+            <div class="icons-containers">
+                <div class="icons-container">
+                    <i class="fas fa-cogs"></i>
+                    <p  id="info-mikrotik-cpu"></p>
+                </div>
+                <div class="icons-container">
+                    <i class="fas fa-wifi"></i>
+                    <p  id="info-mikrotik-kuota"></p>
+                </div>
+                <div class="icons-container">
+                    <i class="fas fa-exchange-alt"></i>
+                    <p  id="info-mikrotik-traffic"></p>
+                </div>
+                <div class="icons-container">
+                    <i class="fas fa-clock"></i>
+                    <p id="info-mikrotik-uptime"></p>
+                </div>
+            </div>
+        </div>
+
         <div class="tambah-hotspot" id="tambah-hotspot">
             <div class="list-menu-flex">
                 <button class="btn btn-primary btn-tambah-akun" onclick="tampilkanlisthotspot()">List Akun</button>
@@ -238,30 +262,6 @@
                         <tbody class="custom-table-body-loghotspot">
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-container" id="info-device-mikrotik">
-            <div class="info-mikrotik">
-                <h5 id="info-mikrotik-identity"></h5>
-            </div>
-            <div class="icons-containers">
-                <div class="icons-container">
-                    <i class="fas fa-cogs"></i>
-                    <p  id="info-mikrotik-cpu"></p>
-                </div>
-                <div class="icons-container">
-                    <i class="fas fa-wifi"></i>
-                    <p  id="info-mikrotik-kuota"></p>
-                </div>
-                <div class="icons-container">
-                    <i class="fas fa-exchange-alt"></i>
-                    <p  id="info-mikrotik-traffic"></p>
-                </div>
-                <div class="icons-container">
-                    <i class="fas fa-clock"></i>
-                    <p id="info-mikrotik-uptime"></p>
                 </div>
             </div>
         </div>

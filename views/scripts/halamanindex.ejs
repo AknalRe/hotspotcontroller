@@ -561,6 +561,7 @@
             }
 
             var socket = io();
+            let jumlahData = 0;
 
             socket.on('useraktif', function (data) {
                 const infoaktif = document.getElementById('info-akun-aktif');
@@ -569,7 +570,6 @@
                 tbody.innerHTML = '';
                 if (data) {
                     // console.log(data);
-                    let jumlahData = 0;
 
                     // Menangani baik array maupun non-array
                     if (Array.isArray(data)) {
@@ -1019,7 +1019,7 @@
                     downloadSpeed = "Download : " + downloadSpeed;
                     uploadSpeed = "Upload : " + uploadSpeed;
                     
-                    document.getElementById('info-mikrotik-traffic').textContent = " " + downloadSpeed + " / " + uploadSpeed;
+                    document.getElementById('info-mikrotik-traffic').innerHTML = " " + downloadSpeed + "<br>" + uploadSpeed;
             });
 
             socket.on('interface', function(data) {
@@ -1032,7 +1032,7 @@
                     }
                         
                     var totalGB = (totalBytes.toFixed(2)) + "GB";
-                    document.getElementById('info-mikrotik-kuota').textContent = " " + totalGB;
+                    document.getElementById('info-mikrotik-kuota').textContent = " " + jumlahData + " User Aktif";
                 })
             });
 
