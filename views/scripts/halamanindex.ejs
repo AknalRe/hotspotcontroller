@@ -716,7 +716,7 @@
 
                 if (data && data.length > 0) {
                     data.forEach(function (item) {
-                        if (item.parent.includes("Selain") && item.name !== item.target.replace("/32", "")) {
+                        if (item.parent.endsWith("Selain") && item.name !== item.target.replace("/32", "")) {
                             dataqueue = true;
                             count++;
                             var row = document.createElement('tr');
@@ -727,9 +727,6 @@
 
                             var namaCell = document.createElement('td');
                             namaCell.textContent = item.name;
-
-                            // var divisiCell = document.createElement('td');
-                            // divisiCell.textContent = item.parent || ``;
 
                             var targetCell = document.createElement('td');
                             targetCell.textContent = item.target.replace("/32", "");
@@ -744,22 +741,26 @@
                             var uploadRate = parseFloat(rates[0]);
                             var downloadRate = parseFloat(rates[1]);
 
+                            var pemakaianCell = document.createElement('td');
+
                             var uploadSpeed, downloadSpeed;
                             if (uploadRate >= 1000000) {
+                                pemakaianCell.style.color = "red";
+                                row.style.background = 'white';
                                 uploadSpeed = (uploadRate / 1000000).toFixed(2) + " Mbps";
                             } else {
                                 uploadSpeed = (uploadRate / 1000).toFixed(2) + " kbps";
                             }
 
                             if (downloadRate >= 1000000) {
+                                pemakaianCell.style.color = "red";
+                                row.style.background = 'white';
                                 downloadSpeed = (downloadRate / 1000000).toFixed(2) + " Mbps";
                             } else {
                                 downloadSpeed = (downloadRate / 1000).toFixed(2) + " kbps";
                             }
 
                             var formattedRate = uploadSpeed + " / " + downloadSpeed;
-
-                            var pemakaianCell = document.createElement('td');
                             pemakaianCell.textContent = formattedRate;
 
                             var statusCell = document.createElement('td');
@@ -780,7 +781,6 @@
 
                             row.appendChild(countCell);
                             row.appendChild(namaCell);
-                            // row.appendChild(divisiCell);
                             row.appendChild(targetCell);
                             row.appendChild(prioCell);
                             row.appendChild(maxlimitCell);
@@ -1056,6 +1056,13 @@
                         timeCell.textContent = item.time;
 
                         var messageCell = document.createElement('td');
+                        if (item.message.includes('logged in')) {
+                            messageCell.style.color = 'green';
+                            row.style.background = 'white';
+                        } else if (item.message.includes('logged out')) {
+                            messageCell.style.color = 'red';
+                            row.style.background = 'white';
+                        }
                         messageCell.textContent = item.message;
 
                         row.appendChild(countCell);

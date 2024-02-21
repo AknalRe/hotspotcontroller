@@ -46,8 +46,14 @@
     }
 }
 
-.table-container {
-    max-width: 100%;
+.my-custom-scrollbar {
+    position: relative;
+    max-height: 800px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
 }
 
 .table-list-hotspot {
@@ -91,6 +97,8 @@
     max-height: 50px;
     overflow-y: auto;
 }
+
+
 
 th, td {
     border: 1px solid #f8f8f8;

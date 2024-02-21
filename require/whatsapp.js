@@ -1,4 +1,4 @@
-const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik } = require('./main');
+const { logg, moment, readUserFile, title, author, nomorwa, Mikrotik, APPDEBUG, APPENV } = require('./main');
 const axios = require('axios');
 
 const urlWA = process.env.LINKWA;
@@ -8,22 +8,26 @@ const apikeyWA2 = process.env.APIKEYWA2;
 const idgrup = process.env.IDKOMUNITAS;
 
 async function KirimPesanWA(nomorTujuan, pesan, linkGambar) {
-    const payload = linkGambar
-        ? { apikey: apikeyWA, to: nomorTujuan, message: pesan, url: linkGambar }
-        : { apikey: apikeyWA, to: nomorTujuan, message: pesan };
-
-    const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        data: JSON.stringify(payload),
-        url: urlWA,
-    };
-
-    try {
-        const response = await axios(options);
-        return response.data;
-    } catch (err) {
-        return KirimPesanWA2(nomorTujuan, pesan);
+    if (!APPDEBUG && ENV !== 'local') {
+        const payload = linkGambar
+            ? { apikey: apikeyWA, to: nomorTujuan, message: pesan, url: linkGambar }
+            : { apikey: apikeyWA, to: nomorTujuan, message: pesan };
+    
+        const options = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            data: JSON.stringify(payload),
+            url: urlWA,
+        };
+    
+        try {
+            const response = await axios(options);
+            return response.data;
+        } catch (err) {
+            return KirimPesanWA2(nomorTujuan, pesan);
+        }
+    } else {
+        return { success: false, message: `Aplikasi dalam mode pengembang`};
     }
 }
 
@@ -53,6 +57,11 @@ async function KirimPesanWA2(nomorTujuan, pesan) {
 }
 
 async function kirimNotif(pesan) {
+    if (!APPDEBUG && ENV !== 'local') {
+
+    } else {
+        return { success: false, message: `Aplikasi dalam mode pengembang`};
+    }
     const payload = {
         secretApp: apikeyWA2,
         grup: "yes",
@@ -78,32 +87,40 @@ async function kirimNotif(pesan) {
 }
 
 async function notif(hostname, username, role, message) {
-    let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${hostname}\nMikrotik : ${Mikrotik.mikrotikidentity}\nUsername : ${username}\nRole : ${role}\nMessage : \n\n'${message}'`
-    try {
-        const response = await kirimNotif(pesan);
-        if (response.success) {
-            logg(true, `Berhasil mengirimkan notif ke admin`);
-        } else {
-            logg(false, `Gagal mengirimkan notif ke admin`);
+    if (!APPDEBUG && ENV !== 'local') {
+        let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${hostname}\nMikrotik : ${Mikrotik.mikrotikidentity}\nUsername : ${username}\nRole : ${role}\nMessage : \n\n'${message}'`
+        try {
+            const response = await kirimNotif(pesan);
+            if (response.success) {
+                logg(true, `Berhasil mengirimkan notif ke admin`);
+            } else {
+                logg(false, `Gagal mengirimkan notif ke admin`);
+            }
+            return response
+        } catch (err) {
+            return { success: false, response: err.message}
         }
-        return response
-    } catch (err) {
-        return { success: false, response: err.message}
+    } else {
+        return { success: false, message: `Aplikasi dalam mode pengembang`};
     }
 }
 
 async function notifmikrotik(message) {
-    let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\n\n\n*'${message}'*\nMohon segera dicek lebih lanjut!`
-    try {
-        const response = await kirimNotif(pesan);
-        if (response.success) {
-            logg(true, `Berhasil mengirimkan notif ke admin`);
-        } else {
-            logg(false, `Gagal mengirimkan notif ke admin`);
+    if (!APPDEBUG && ENV !== 'local') {
+        let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\n\n\n*'${message}'*\nMohon segera dicek lebih lanjut!`
+        try {
+            const response = await kirimNotif(pesan);
+            if (response.success) {
+                logg(true, `Berhasil mengirimkan notif ke admin`);
+            } else {
+                logg(false, `Gagal mengirimkan notif ke admin`);
+            }
+            return response
+        } catch (err) {
+            return { success: false, response: err.message}
         }
-        return response
-    } catch (err) {
-        return { success: false, response: err.message}
+    } else {
+        return { success: false, message: `Aplikasi dalam mode pengembang`};
     }
 }
 

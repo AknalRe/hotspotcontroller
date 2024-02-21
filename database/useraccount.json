@@ -7,10 +7,22 @@
       "role": "Administrator"
     },
     "2": {
+      "username": "Jamal20",
+      "password": "Jamal4220",
+      "name": "Jamal",
+      "role": "Administrator"
+    },
+    "3": {
+      "username": "admin",
+      "password": "csoperator",
+      "name": "CS Clarice MJS",
+      "role": "Admin"
+    },
+    "4": {
       "username": "admin2",
       "password": "csoperator2",
       "name": "CS Clarice MJS 2",
-      "role": "Admin"
+      "role": "Administrator"
     }
   }
 }

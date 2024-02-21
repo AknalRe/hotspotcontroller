@@ -6,6 +6,8 @@ const nomorwa = process.env.NOMORWA;
 const hostname = process.env.HOSTNAME;
 const timeout1 = parseInt(process.env.TIMEOUT1);
 const timeout2 = parseInt(process.env.TIMEOUT2);
+const APPDEBUG = process.env.APP_DEBUG;
+const APPENV = process.env.APP_ENV
 
 const fs = require('fs');
 const path = require('path');
@@ -73,6 +75,59 @@ async function logg(status, message) {
     }
 }
 
+fs.readFile('.env', 'utf8', (err, envData) => {
+    if (err) {
+        console.error('Gagal membaca file .env:', err);
+        return;
+    }
+
+    // Ubah isi file .env menjadi array baris
+    const envLines = envData.split('\n');
+    const jmlhbaris = envLines.length;
+    let baris = 0;
+
+    // Hapus nilai pada setiap variabel
+    const copyEnvLines = envLines.map(line => {
+        baris++;
+        if (line.trim() !== "" && line.includes('=')) {
+            if (baris !== jmlhbaris) {
+                const key = line.split('=')[0];
+                // const value = line.split('=')[1];
+                let command;
+                if (line.includes('#')) {
+                    command = " #" + line.split(' #')[1];
+                } else {
+                    command = "";
+                }
+                return `${key}=""${command}\n`;
+            } else {
+                const [key] = line.split('=');
+                return `${key}`;
+            }
+        } else {
+            return line + '\n';
+        }
+    });
+
+    // Gabungkan array baris menjadi string
+    const copyEnvContent = copyEnvLines.join('');
+
+    // Tulis kembali isi file .copyenv
+    fs.writeFile('.copyenv', copyEnvContent, 'utf8', err => {
+        if (!APPDEBUG && ENV !== 'local') {
+            if (err) {
+                logg(false, `Gagal menulis file .copyenv: ${err}`);
+                return;
+            }
+            logg(true,'.copyenv berhasil diperbarui.');
+        } else {
+            if (err) {
+                return;
+            }
+        }
+    });
+});
+
 module.exports = {
     logg,
     moment,
@@ -83,4 +138,6 @@ module.exports = {
     nomorwa,
     timeout1,
     timeout2,
+    APPDEBUG,
+    APPENV,
 }
