@@ -8,7 +8,7 @@ const apikeyWA2 = process.env.APIKEYWA2;
 const idgrup = process.env.IDKOMUNITAS;
 
 async function KirimPesanWA(nomorTujuan, pesan, linkGambar) {
-    if (!APPDEBUG && ENV !== 'local') {
+    if (!APPDEBUG && APPENV !== 'local') {
         const payload = linkGambar
             ? { apikey: apikeyWA, to: nomorTujuan, message: pesan, url: linkGambar }
             : { apikey: apikeyWA, to: nomorTujuan, message: pesan };
@@ -57,7 +57,7 @@ async function KirimPesanWA2(nomorTujuan, pesan) {
 }
 
 async function kirimNotif(pesan) {
-    if (!APPDEBUG && ENV !== 'local') {
+    if (!APPDEBUG && APPENV !== 'local') {
 
     } else {
         return { success: false, message: `Aplikasi dalam mode pengembang`};
@@ -87,7 +87,7 @@ async function kirimNotif(pesan) {
 }
 
 async function notif(hostname, username, role, message) {
-    if (!APPDEBUG && ENV !== 'local') {
+    if (!APPDEBUG && APPENV !== 'local') {
         let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\nHostname : ${hostname}\nMikrotik : ${Mikrotik.mikrotikidentity}\nUsername : ${username}\nRole : ${role}\nMessage : \n\n'${message}'`
         try {
             const response = await kirimNotif(pesan);
@@ -106,7 +106,7 @@ async function notif(hostname, username, role, message) {
 }
 
 async function notifmikrotik(message) {
-    if (!APPDEBUG && ENV !== 'local') {
+    if (!APPDEBUG && APPENV !== 'local') {
         let pesan = `Waktu : ${moment().format("DD/MMMM/YYYY - hh:mm:ss")}\n\n\n*'${message}'*\nMohon segera dicek lebih lanjut!`
         try {
             const response = await kirimNotif(pesan);

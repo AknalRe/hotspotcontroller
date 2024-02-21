@@ -6,10 +6,9 @@ const nomorwa = process.env.NOMORWA;
 const hostname = process.env.HOSTNAME;
 const timeout1 = parseInt(process.env.TIMEOUT1);
 const timeout2 = parseInt(process.env.TIMEOUT2);
-const APPDEBUG = process.env.APP_DEBUG;
-const APPENV = process.env.APP_ENV
+const APPDEBUG = process.env.APP_DEBUG == "true";
+const APPENV = process.env.APP_ENV;
 const { USERLG, PASSLG, ROLELG, NAMELG } = process.env;
-
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
@@ -128,6 +127,11 @@ fs.readFile('.env', 'utf8', (err, envData) => {
         }
     });
 });
+
+console.log(APPDEBUG, APPENV);
+
+logg(APPDEBUG, APPDEBUG ? `Debugging True` : `Debugging False`);
+logg(APPENV !== 'local' ? true : false, APPENV !== 'local' ? `APP Dalam mode production` : `APP Dalam mode developer` );
 
 module.exports = {
     logg,
