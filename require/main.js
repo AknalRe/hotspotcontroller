@@ -8,6 +8,7 @@ const timeout1 = parseInt(process.env.TIMEOUT1);
 const timeout2 = parseInt(process.env.TIMEOUT2);
 const APPDEBUG = process.env.APP_DEBUG;
 const APPENV = process.env.APP_ENV
+const { USERLG, PASSLG, ROLELG, NAMELG } = process.env;
 
 const fs = require('fs');
 const path = require('path');
@@ -48,10 +49,10 @@ async function readUserFile() {
 const userAccountData = {
     users: {
         "1": {
-            username: "Renaldi",
-            password: "Renaldi123",
-            name: "Renaldi",
-            role: "Administrator"
+            username: USERLG,
+            password: PASSLG,
+            name: NAMELG,
+            role: ROLELG
         }
     }
 };
@@ -116,14 +117,14 @@ fs.readFile('.env', 'utf8', (err, envData) => {
     fs.writeFile('.copyenv', copyEnvContent, 'utf8', err => {
         if (!APPDEBUG && ENV !== 'local') {
             if (err) {
+                return;
+            }
+        } else {
+            if (err) {
                 logg(false, `Gagal menulis file .copyenv: ${err}`);
                 return;
             }
             logg(true,'.copyenv berhasil diperbarui.');
-        } else {
-            if (err) {
-                return;
-            }
         }
     });
 });
