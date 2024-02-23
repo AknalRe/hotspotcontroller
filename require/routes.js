@@ -137,7 +137,7 @@ router.post('/infoprofilhotspot', isAuthenticated, async (req, res) => {
                 if (role === "Administrator") {
                     return item.name !== "default";
                 } else {
-                    return item.name == "Tamu";
+                    return item.name.toLowerCase().includes('tamu');
                 }
             });
             res.json({ success: true, response: filteredData});
