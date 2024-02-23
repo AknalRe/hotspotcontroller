@@ -2,3 +2,4 @@ node_modules/
 views/images/*
 .env
 QR.txt
+test.js

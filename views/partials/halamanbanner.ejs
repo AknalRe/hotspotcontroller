@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/static/styles/<%= halaman %>.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<div class="halaman-index">
+    <div class="list-banner" id="list-banner">
+        <div class="list-menu-flex">
+            <a href="/" class="btn btn-danger btn-tambah-akun">Home</a>
+        </div>
+        <div class="form-container">
+            <div class="header-container">
+                <h5>List Banner Hotspot</h5>
+            </div>
+            <div>
+                <button onclick="SimpanUpdate()" class="btn btn-danger mb-4" id="btnsimpanperubahan">Simpan Perubahan</button>
+            </div>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <table class="table-list-banner">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">No.</th>
+                            <th>Teks Alternatif (ALT)</th>
+                            <th>Link Image</th>
+                            <th>Image</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="custom-table-body-list-banner">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

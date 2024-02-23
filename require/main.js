@@ -128,7 +128,7 @@ fs.readFile('.env', 'utf8', (err, envData) => {
     });
 });
 
-console.log(APPDEBUG, APPENV);
+// console.log(APPDEBUG, APPENV);
 
 logg(!APPDEBUG, APPDEBUG ? `Debugging True` : `Debugging False`);
 logg(APPENV !== 'local' ? true : false, APPENV !== 'local' ? `APP Dalam mode production` : `APP Dalam mode developer` );

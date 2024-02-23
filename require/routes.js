@@ -67,7 +67,13 @@ router.get('/editqueue/:id', isAuthenticated, async (req, res) => {
 router.get('/generateqr', isAuthenticated, async (req, res) => {
     const { mikrotikstatus } = Mikrotik;
     const { username, role, name } = req.session;
-    res.render('index', { author, title, halaman: "halamangenerateqr", page: `Generate QRcode`, message: "", username, role, mikrotikstatus})
+    res.render('index', { author, title, halaman: "halamangenerateqr", page: `Generate QRcode`, message: "", username, role, mikrotikstatus});
+});
+
+router.get('/banner/hotspot', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { username, role, name } = req.session;
+    res.render('index', { author, title, halaman: "halamanbanner", page: `Banner Hotspot`, message: "", username, role, mikrotikstatus});
 });
 
 // POST Route
@@ -430,6 +436,53 @@ router.post('/deleteQRCode', isAuthenticated, async (req, res) => {
         res.json({ success: false, message: `Gagal menghapus gambar QR Code ${fileName}` });
     }
 });
+
+router.post('/getfilebannerjs', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    if (mikrotikstatus) {
+        try {
+            // let response = await client.write('/file/print', [
+            //     '?name=flash/HotspotClarice/banner.js',
+            // ]);
+            let response = await client.write('/file/print', [
+                '?name=flash/HotspotClarice/banner.js'
+            ]);
+            response = response.length > 1 ? response : response[0];
+            logg(true, `Berhasil mendapatkan data banner.js`)
+            res.json({ success: true, message: `Berhasil mendapatkan data banner.js`, response: response });
+        } catch (err) {
+            logg(false, `Gagal mendapatkan data banner.js, error: ${err.message}`);
+            res.json({ success: false, message: `Gagal mendapatkan data banner.js`, response: err.message });
+        }
+    } else {
+        logg(false, `Mikrotik tidak terhubung`)
+        res.json({ success: false, message: `Mikrotik tidak terhubung`});
+    }
+});
+
+router.post('/updatebannerjs', isAuthenticated, async (req, res) => {
+    const { mikrotikstatus } = Mikrotik;
+    const { id, contents } = req.body;
+    if (mikrotikstatus) {
+        try {
+            if (!contents) {
+                es.json({ success: false, message: `Gagal merubah content banner`})
+            }
+            await client.write('/file/set', [
+                '=.id=' + id,
+                '=contents=' + contents,
+            ])                
+            logg(true, `Berhasil merubah content banner`);
+            res.json({ success: true, message: `Berhasil merubah content banner`})
+        } catch (err) {
+            logg(false, `Gagal merubah content banner, error: ${err}`);
+            res.json({ success: false, message: `Gagal merubah content banner`, response: err.message });
+        }
+    } else {
+        logg(false, `Mikrotik tidak terhubung`)
+        res.json({ success: false, message: `Mikrotik tidak terhubung`});
+    }
+})
 
 router.use((req, res) => {
   const prevpage = req.session.prevpage || '/';

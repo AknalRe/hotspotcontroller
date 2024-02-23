@@ -1,0 +1,49 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 30px;
+}
+
+.form-container {
+    margin-top: 20px;
+    border: 1px solid #f8f8f8;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    max-height: 800px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}
+
+.table-list-banner {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #f8f8f8;
+    padding: 8px;
+}
+
+th {
+    width: auto;
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+td {
+    width: auto;
+}
+
+tr:hover {
+    background-color: #000000;
+}
