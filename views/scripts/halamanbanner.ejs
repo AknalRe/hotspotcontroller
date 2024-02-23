@@ -11,7 +11,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                // console.log(data.response)
+                console.log(data.response)
                 const contents = data.response.contents;
                 const regex = /\[[\s\S]*?\]/;
                 const match = regex.exec(contents);

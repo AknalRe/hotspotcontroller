@@ -2,6 +2,12 @@
 APP_DEBUG=
 APP_ENV=
 
+# User Login Default
+USERLG=
+PASSLG=
+ROLELG=
+NAMELG=
+
 # Mikrotik
 HOST=
 USER=
