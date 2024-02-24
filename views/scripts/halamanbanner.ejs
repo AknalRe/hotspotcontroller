@@ -1,6 +1,8 @@
 <script>
     let id;
     let array = [];
+    let newarray = [];
+    let count = 0;
 
     function getdatabanner() {
         fetch('/getfilebannerjs', {
@@ -11,19 +13,15 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data.response)
+                // console.log(data.response)
                 const contents = data.response.contents;
                 const regex = /\[[\s\S]*?\]/;
                 const match = regex.exec(contents);
                 // console.log(match)
                 const bannerString = match[0].replace(/(\r\n|\n|\r)/gm, "");
-                // console.log(bannerString);
+                // console.log(JSON.parse(bannerString));
                 id = data.response[".id"];
                 updatetablebanner(bannerString, data.response[".id"]);
-
-                // const test = JSON.parse("["+bannerString+"]");
-                // console.log(test);
-                // console.log(JSON.parse(match[1]))
             })
             .catch(error => {
                 console.log('Error:', error);
@@ -31,15 +29,15 @@
     }
 
     getdatabanner();
+    let tbody = document.querySelector('.custom-table-body-list-banner');
 
     function updatetablebanner(data, id) {
-        // console.log(data);
-        const banner = JSON.parse(data);
-        var tbody = document.querySelector('.custom-table-body-list-banner');
         tbody.innerHTML = '';
-        let count = 0;
+        const banner = JSON.parse(data);
+        let lastid = 0;
         banner.forEach(function (item) {
             count++;
+            lastid++;
             var row = document.createElement('tr');
 
             var countCell = document.createElement('td');
@@ -77,6 +75,7 @@
                 var newAlt = altInput.value;
                 var newLink = linkInput.value;
                 var index = array.findIndex(x => x.id === item.id);
+                // console.log(index)
                 if (index !== -1) {
                     array[index].alt = newAlt;
                     array[index].link = newLink;
@@ -95,7 +94,6 @@
                 if (index !== -1) {
                     array.splice(index, 1);
                     showNotification(true, `Data nomor ${item.id} berhasil dihapus`);
-                    // Perbarui tampilan setelah menghapus
                     tbody.removeChild(row);
                 } else {
                     showNotification(false, `Data dengan ID ${item.id} tidak ditemukan`);
@@ -104,8 +102,6 @@
 
             actionCell.appendChild(SaveButton);
             actionCell.appendChild(DeleteButton);
-
-            // Validasi ID unik sebelum menambahkan ke dalam array
             if (!array.some(x => x.id === item.id)) {
                 array.push({ id: item.id, alt: item.alt, link: item.link });
                 row.appendChild(countCell);
@@ -118,19 +114,94 @@
                 showNotification(false, `Data dengan ID ${item.id} tidak unik`);
             }
         });
+        newarray.push({ id: (lastid + 1), alt: "", link: "" })
+    }
 
+    function TambahBanner() {
+        // console.log(newarray)
+        count++;
+        const id = count;
+        var row = document.createElement('tr');
 
-        // console.log(array);
+        var countCell = document.createElement('td');
+        countCell.textContent = count + ".";
+        countCell.style.width = '30px';
 
-        // console.log(banner);
-        // console.log(banner.length);
-        // const update = "var banner = " + data;
-        // console.log(update)
+        var altCell = document.createElement('td');
+        var altInput = document.createElement('input');
+        altInput.type = 'text';
+        altInput.value = newarray.alt ? newarray.alt : "";
+        altCell.appendChild(altInput);
+
+        var linkCell = document.createElement('td');
+        var linkInput = document.createElement('input');
+        linkInput.type = 'text';
+        linkInput.value = newarray.link ? newarray.link : "";
+        linkCell.appendChild(linkInput);
+        linkCell.style.width = '150px';
+
+        var imgCell = document.createElement('td');
+        var imgElement = document.createElement('img');
+        imgElement.src = newarray.link ? newarray.link : "";
+        imgElement.style.width = '100%';
+        imgElement.style.height = 'auto';
+        imgCell.style.width = '150px';
+        imgCell.appendChild(imgElement);
+
+        var actionCell = document.createElement('td');
+
+        var SaveButton = document.createElement('button');
+        SaveButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-primary');
+        SaveButton.textContent = "Simpan";
+        SaveButton.style.margin = '5px';
+        SaveButton.addEventListener('click', function () {
+            var newid = newarray.id ? newarray.id : id;
+            var newAlt = altInput.value;
+            var newLink = linkInput.value;
+            // console.log(newid, newAlt, newLink)
+            var index = array.findIndex(x => x.id === newid);
+            var isFound = index !== -1;
+            // console.log(isFound)
+            if (!isFound) {
+                // console.log(array)
+                array.push({ id: newid, alt: newAlt, link: newLink})
+                // console.log(array)
+                showNotification(true, `Data nomor ${newarray.id ? newarray.id : count} berhasil di simpan dan di tambahkan`);
+            } else {
+                showNotification(false, `Data nomor ${newarray.id ? newarray.id : count} gagal di simpan dan di tambahkan`);
+            }
+        });
+
+        var DeleteButton = document.createElement('button');
+        DeleteButton.classList.add('btn', 'btn-vpn-nonaktif', 'btn-danger');
+        DeleteButton.textContent = "Hapus";
+        DeleteButton.style.margin = '5px';
+        DeleteButton.addEventListener('click', function () {
+            var index = array.findIndex(x => x.id === newarray.id ? newarray.id : count);
+            var isFound = index !== -1;
+            if (!isFound) {
+                array.splice(index, 1);
+                showNotification(true, `Data nomor ${newarray.id ? newarray.id : count} berhasil dihapus`);
+                tbody.removeChild(row);
+                count -= 1;
+            } else {
+                showNotification(true, `Data nomor ${newarray.id ? newarray.id : count} berhasil dihapus`);
+                tbody.removeChild(row);
+                count -= 1;
+            }
+        });
+
+        actionCell.appendChild(SaveButton);
+        actionCell.appendChild(DeleteButton);
+        row.appendChild(countCell);
+        row.appendChild(altCell);
+        row.appendChild(linkCell);
+        row.appendChild(imgCell);
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
     }
 
     function SimpanUpdate() {
-        // console.log(id);
-        // console.log(array);
         const update = "var banner = " + JSON.stringify(array);
         updatedatabanner(id, update);
     }
@@ -152,10 +223,12 @@
                 // console.log(data);
                 showNotification(data.success, data.message);
                 setTimeout(() => {
-                    showNotification(true, `Memperbarui data`);
-                    getdatabanner();
+                    // tbody.removeChild(tbody.firstChild);
                     array = [];
-                }, 2000);
+                    getdatabanner();
+                    showNotification(true, `Memperbarui data`);
+                    count = 0;
+                }, 1000);
             })
             .catch(error => {
                 console.log('Error:', error);

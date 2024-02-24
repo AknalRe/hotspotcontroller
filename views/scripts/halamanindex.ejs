@@ -61,7 +61,7 @@
             .then(response => response.json())
             .then(data => {
                 // Hapus semua opsi saat ini
-                console.log(data.response)
+                // console.log(data.response)
                 const selectElement = document.getElementById('jenisAkun');
                 selectElement.innerHTML = "";
                 data.response.forEach(option => {
