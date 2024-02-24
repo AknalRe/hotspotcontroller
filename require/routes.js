@@ -480,7 +480,7 @@ router.post('/updatebannerjs', isAuthenticated, async (req, res) => {
         }
     } else {
         logg(false, `Mikrotik tidak terhubung`)
-        res.json({ success: false, message: `Mikrotik tidak terhubung`});s
+        res.json({ success: false, message: `Mikrotik tidak terhubung`});
     }
 })
 
