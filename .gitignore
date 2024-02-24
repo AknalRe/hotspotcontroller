@@ -1,5 +1,6 @@
 node_modules/
 views/images/*
+database/useraccount.json
 .env
 QR.txt
 test.js
