@@ -45,8 +45,11 @@ document.getElementById('login-post').addEventListener('submit', function (event
         if (data.success) {
             showInfo(data.success, data.message);
             setTimeout(() => {
-                window.location.href = '/';
+                showInfo(data.success, `Memproses login, mohon ditunggu`);
             }, 1000);
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
         } else {
             showInfo(data.success, data.message);
         }

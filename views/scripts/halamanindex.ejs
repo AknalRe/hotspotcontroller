@@ -38,6 +38,9 @@
                 if (data.success) {
                     showNotification(data.success, data.message);
                     setTimeout(() => {
+                        showNotification(data.success, `Memproses logout, mohon tunggu`);
+                    }, 2000);
+                    setTimeout(() => {
                         window.location.href = '/';
                     }, 5000);
                 } else {
