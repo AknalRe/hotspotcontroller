@@ -32,8 +32,8 @@ router.get('/editakunhotspot/:id', isAuthenticated, async (req, res) => {
             const responseData = response.length > 1 ? response : response[0];
 
             // console.log(responseData);
-            
-            res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: `Edit (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData});
+
+            res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: `Edit (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData });
         } else {
             res.render("index", { author, title, halaman: "halamaneditakunhotspot", page: "", message: "", username, role, mikrotikstatus, nomorwa, name, success: false, response: `Mikrotik Tidak Terkoneksi` });
         }
@@ -54,8 +54,8 @@ router.get('/editqueue/:id', isAuthenticated, async (req, res) => {
             ]);
 
             const responseData = response.length > 1 ? response : response[0];
-            
-            res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData});
+
+            res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue (${responseData.name})`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: responseData });
         } else {
             res.render("index", { author, title, halaman: "halamaneditqueuehotspot", page: `Edit Queue`, message: "", username, role, mikrotikstatus, nomorwa, name, success: true, response: `Mikrotik Tidak Terkoneksi` });
         }
@@ -67,25 +67,25 @@ router.get('/editqueue/:id', isAuthenticated, async (req, res) => {
 router.get('/generateqr', isAuthenticated, async (req, res) => {
     const { mikrotikstatus } = Mikrotik;
     const { username, role, name } = req.session;
-    res.render('index', { author, title, halaman: "halamangenerateqr", page: `Generate QRcode`, message: "", username, role, mikrotikstatus});
+    res.render('index', { author, title, halaman: "halamangenerateqr", page: `Generate QRcode`, message: "", username, role, mikrotikstatus });
 });
 
 router.get('/banner/hotspot', isAuthenticated, async (req, res) => {
     const { mikrotikstatus } = Mikrotik;
     const { username, role, name } = req.session;
-    res.render('index', { author, title, halaman: "halamanbanner", page: `Banner Hotspot`, message: "", username, role, mikrotikstatus});
+    res.render('index', { author, title, halaman: "halamanbanner", page: `Banner Hotspot`, message: "", username, role, mikrotikstatus });
 });
 
 // POST Route
 
 router.post('/test', async (req, res) => {
-    res.send({ success:true, message: "Hello World!" });
+    res.send({ success: true, message: "Hello World!" });
 })
 
 router.post('/login', async (req, res) => {
     const ip = req.headers['x-forwarded-for']
-    ? `${req.headers['x-forwarded-for']}`
-    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`
+        ? `${req.headers['x-forwarded-for']}`
+        : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "")}`
     try {
         const { username, password } = req.body;
 
@@ -120,16 +120,16 @@ router.post('/login', async (req, res) => {
 
 router.post("/logout", isAuthenticated, async (req, res) => {
     const ip = req.headers['x-forwarded-for']
-    ? `${req.headers['x-forwarded-for']}`
-    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`
+        ? `${req.headers['x-forwarded-for']}`
+        : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "")}`
     const username = req.session.username;
     try {
         req.session.destroy();
         logg(true, `(${username}) Berhasil Logout`)
-        res.json({ success: true, message: `(${username}) Berhasil Logout`})
-    } catch(err) {
+        res.json({ success: true, message: `(${username}) Berhasil Logout` })
+    } catch (err) {
         logg(false, `(${username}) Gagal Logout : ${err}`)
-        res.json({ success: false, message: `(${username}) Gagal Logout`})
+        res.json({ success: false, message: `(${username}) Gagal Logout` })
     }
 })
 
@@ -146,12 +146,12 @@ router.post('/infoprofilhotspot', isAuthenticated, async (req, res) => {
                     return item.name.toLowerCase().includes('tamu');
                 }
             });
-            res.json({ success: true, response: filteredData});
+            res.json({ success: true, response: filteredData });
         } else {
-            res.json({ success: false, response: `Mikrotik tidak terhubung`})
+            res.json({ success: false, response: `Mikrotik tidak terhubung` })
         }
     } catch (err) {
-        res.json({ success: false, response: err})
+        res.json({ success: false, response: err })
     }
 });
 
@@ -171,7 +171,7 @@ router.post("/hotspotuserlist", isAuthenticated, async (req, res) => {
     try {
         if (mikrotikstatus) {
             const response = await client.write("/ip/hotspot/user/print");
-            
+
             const filteredData = response.filter(item => {
                 if (role === "Administrator") {
                     return item[".id"] !== "*0" && item[".id"] !== "*2";
@@ -181,10 +181,10 @@ router.post("/hotspotuserlist", isAuthenticated, async (req, res) => {
             });
             res.json(filteredData);
         } else {
-            res.json({ success: false, message: `Mikrotik tidak terhubung`})
+            res.json({ success: false, message: `Mikrotik tidak terhubung` })
         }
     } catch (err) {
-        res.json({success: false, message: err})
+        res.json({ success: false, message: err })
     }
 });
 
@@ -205,13 +205,13 @@ router.post('/nonaktifkanakunhotspot', isAuthenticated, async (req, res) => {
             ])
             await notif(req.hostname, req.session.username, req.session.role, `Berhasil ${message} akun ${nama}`)
             logg(true, `(${req.session.username}) Berhasil ${message} user (${nama})`);
-            res.json({success: true, message: `Berhasil ${message} user (${nama})`});
+            res.json({ success: true, message: `Berhasil ${message} user (${nama})` });
         } catch (err) {
             logg(false, `(${req.session.username}) Gagal ${message} user (${nama})`);
-            res.json({success: false, message: `Gagal ${message} user (${nama})`})
+            res.json({ success: false, message: `Gagal ${message} user (${nama})` })
         }
     } else {
-        res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
+        res.json({ success: false, message: "Mikrotik Tidak Terkoneksi" });
     }
 })
 
@@ -225,13 +225,13 @@ router.post('/deleteakunhotspot', isAuthenticated, async (req, res) => {
             ]);
             await notif(req.hostname, req.session.username, req.session.role, `Berhasil menghapus user ${nama}`);
             logg(true, `(${req.session.username}) Berhasil menghapus user (${nama})`);
-            res.json({success: true, message: `Berhasil menghapus user (${nama})`});
+            res.json({ success: true, message: `Berhasil menghapus user (${nama})` });
         } catch (err) {
             logg(false, `(${req.session.username}) Gagal menghapus user (${nama})`);
-            res.json({success: false, message: `Gagal menghapus user (${nama})`, response: err});
+            res.json({ success: false, message: `Gagal menghapus user (${nama})`, response: err });
         };
     } else {
-        res.json({success: false, message: "Mikrotik Tidak Terkoneksi"});
+        res.json({ success: false, message: "Mikrotik Tidak Terkoneksi" });
     }
 })
 
@@ -240,8 +240,8 @@ router.post('/editakunhotspot', isAuthenticated, async (req, res) => {
     const { usernamelama, id, username, password, jenisAkun } = req.body;
     // console.log(usernamelama, id, username, password, jenisAkun)
     const ip = req.headers['x-forwarded-for']
-    ? `${req.headers['x-forwarded-for']}`
-    : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "") }`;
+        ? `${req.headers['x-forwarded-for']}`
+        : `${req.ip == "::1" ? "127.0.0.1" : req.ip.replace("::ffff:", "")}`;
     const response = await editakun(usernamelama, id, username, jenisAkun, password);
     if (response.success) {
         await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengubah data akun ${usernamelama} menjadi ${username}-${jenisAkun}`);
@@ -263,18 +263,18 @@ router.post('/logoutkansemua', isAuthenticated, async (req, res) => {
             await Promise.all(aktifuser.map(async user => {
                 // console.log(`${count}. ${user['.id']}`);
                 await client.write('/ip/hotspot/active/remove', [
-                        '=.id=' + user['.id'],
-                    ]);
+                    '=.id=' + user['.id'],
+                ]);
                 count++;
             }));
             logg(true, `Berhasil melogout (${count}) user`);
             await notif(req.hostname, req.session.username, req.session.role, `Berhasil melogout (${count}) user`);
-            res.json({ success: true, message: `Berhasil melogout (${count}) user`});
+            res.json({ success: true, message: `Berhasil melogout (${count}) user` });
         } else {
             logg(false, `Mikrotik tidak terhubung`)
-            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+            res.json({ success: false, message: `Mikrotik tidak terhubung` });
         }
-    } catch(err) {
+    } catch (err) {
         logg(false, `Error melogout semua user, error: ${err.message}`)
         res.json({ success: false, message: `Error melogout semua user, error: ${err.message}` });
     }
@@ -292,14 +292,14 @@ router.post('/logoutakunhotspot', isAuthenticated, async (req, res) => {
             ])
             logg(true, `Berhasil melogout (${nama}) user`);
             await notif(req.hostname, req.session.username, req.session.role, `Berhasil melogout (${nama}) user`);
-            res.json({ success: true, message: `Berhasil melogout (${nama}) user`});
+            res.json({ success: true, message: `Berhasil melogout (${nama}) user` });
         } else {
             logg(false, `Mikrotik tidak terhubung`);
-            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+            res.json({ success: false, message: `Mikrotik tidak terhubung` });
         }
-    } catch(err) {
+    } catch (err) {
         logg(false, `Error melogout (${nama}) user, error: ${err.message}`);
-        res.json({ success: false, message: `Error melogout (${nama}) user, error: ${err.message}`});
+        res.json({ success: false, message: `Error melogout (${nama}) user, error: ${err.message}` });
     }
 })
 
@@ -317,7 +317,7 @@ router.post('/editqueue', isAuthenticated, async (req, res) => {
             logg(true, `Berhasil mengubah queue (${nama} : ${id})`)
             res.json({ success: true, message: `Berhasil mengubah queue (${nama} : ${id})` });
         } else {
-            logg(false, `Mikrotik tidak terhubung` )
+            logg(false, `Mikrotik tidak terhubung`)
             res.json({ success: false, message: `Mikrotik tidak terhubung` });
         }
     } catch (err) {
@@ -345,7 +345,7 @@ router.post('/binding', isAuthenticated, async (req, res) => {
                 ]);
                 logg(true, `Berhasil binding akun ${add}-${mac}`);
                 await notif(req.hostname, req.session.username, req.session.role, `Berhasil binding akun ${add}-${mac}`);
-                res.json({ success: true, message: `Berhasil binding akun ${add}-${mac}`});
+                res.json({ success: true, message: `Berhasil binding akun ${add}-${mac}` });
             } else {
                 if (action) {
                     await client.write('/ip/hotspot/ip-binding/set', [
@@ -354,7 +354,7 @@ router.post('/binding', isAuthenticated, async (req, res) => {
                     ])
                     logg(true, `Berhasil nonaktifkan binding akun ${add}-${mac}`);
                     await notif(req.hostname, req.session.username, req.session.role, `Berhasil nonaktifkan binding akun ${add}-${mac}`);
-                    res.json({ success: true, message: `Berhasil nonaktifkan binding akun ${add}-${mac}`});
+                    res.json({ success: true, message: `Berhasil nonaktifkan binding akun ${add}-${mac}` });
                 } else {
                     await client.write('/ip/hotspot/ip-binding/set', [
                         '=.id=' + response.id,
@@ -362,16 +362,16 @@ router.post('/binding', isAuthenticated, async (req, res) => {
                     ])
                     logg(true, `Berhasil mengaktifkan binding akun ${add}-${mac}`);
                     await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengaktifkan binding akun ${add}-${mac}`);
-                    res.json({ success: true, message: `Berhasil mengaktifkan binding akun ${add}-${mac}`});
+                    res.json({ success: true, message: `Berhasil mengaktifkan binding akun ${add}-${mac}` });
                 }
             }
         } else {
             logg(false, `Mikrotik tidak terhubung`)
-            res.json({ success: false, message: `Mikrotik tidak terhubung`});
+            res.json({ success: false, message: `Mikrotik tidak terhubung` });
         }
     } catch (err) {
         logg(false, `Terjadi kesalahan saat mencoba binding akun, error: ${err.message}`);
-        res.json({ success: false, message: `Error binding akun ${add}-${mac}`, response: err});
+        res.json({ success: false, message: `Error binding akun ${add}-${mac}`, response: err });
     }
 });
 
@@ -387,7 +387,7 @@ router.post('/binding', isAuthenticated, async (req, res) => {
 //     });
 // });
 
-router.post('/generateQRCode', isAuthenticated, async(req, res) => {
+router.post('/generateQRCode', isAuthenticated, async (req, res) => {
     const { ssid, password } = req.body;
     let wifiUri;
     if (password) {
@@ -408,10 +408,10 @@ router.post('/generateQRCode', isAuthenticated, async(req, res) => {
             }
         );
         logg(true, `Berhasil generate QR WiFi (${ssid})`);
-        res.json({ success: true, message: `Berhasil generate QR WiFi (${ssid})`, url: `${nama}`});
+        res.json({ success: true, message: `Berhasil generate QR WiFi (${ssid})`, url: `${nama}` });
     } catch (err) {
         logg(false, `Gagal generate QR WiFi (${ssid}), error: ${err.message}`);
-        res.json({ success: false, message: `Gagal generate QR WiFi (${ssid}), error: ${err.message}`, url: `${nama}`});
+        res.json({ success: false, message: `Gagal generate QR WiFi (${ssid}), error: ${err.message}`, url: `${nama}` });
     }
 });
 
@@ -456,37 +456,45 @@ router.post('/getfilebannerjs', isAuthenticated, async (req, res) => {
         }
     } else {
         logg(false, `Mikrotik tidak terhubung`)
-        res.json({ success: false, message: `Mikrotik tidak terhubung`});
+        res.json({ success: false, message: `Mikrotik tidak terhubung` });
     }
 });
 
 router.post('/updatebannerjs', isAuthenticated, async (req, res) => {
-    const { mikrotikstatus } = Mikrotik;
-    const { id, contents } = req.body;
+    const { mikrotikstatus, mikrotikidentity } = Mikrotik;
+    const { id, contents, data } = req.body;
     if (mikrotikstatus) {
         try {
             if (!contents) {
-                es.json({ success: false, message: `Gagal merubah content banner`})
+                es.json({ success: false, message: `Gagal merubah content banner` })
             }
             await client.write('/file/set', [
                 '=.id=' + id,
                 '=contents=' + contents,
-            ])                
+            ])
+            console.log(data)
             logg(true, `Berhasil merubah content banner`);
-            res.json({ success: true, message: `Berhasil merubah content banner`})
+            let pesan = `List data banner :\n`;
+            data.forEach(function (item) {
+                if (item.alt !== "" && item.link !== "") {
+                    pesan += `\n\n${item.id}. ${item.alt}\nLink Gambar : ${item.link} `;
+                }
+            });
+            await notif(req.hostname, req.session.username, req.session.role, `Berhasil mengupdate banner ${mikrotikidentity}\n\n${pesan}`);
+            res.json({ success: true, message: `Berhasil merubah content banner` })
         } catch (err) {
             logg(false, `Gagal merubah content banner, error: ${err}`);
             res.json({ success: false, message: `Gagal merubah content banner`, response: err.message });
         }
     } else {
         logg(false, `Mikrotik tidak terhubung`)
-        res.json({ success: false, message: `Mikrotik tidak terhubung`});
+        res.json({ success: false, message: `Mikrotik tidak terhubung` });
     }
 })
 
 router.use((req, res) => {
-  const prevpage = req.session.prevpage || '/';
-  res.status(200).render("index", { author, title, page: `404`, halaman: "halaman404", prevpage });
+    const prevpage = req.session.prevpage || '/';
+    res.status(200).render("index", { author, title, page: `404`, halaman: "halaman404", prevpage });
 });
 
 module.exports = {

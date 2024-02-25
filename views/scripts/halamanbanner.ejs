@@ -203,13 +203,14 @@
 
     function SimpanUpdate() {
         const update = "var banner = " + JSON.stringify(array);
-        updatedatabanner(id, update);
+        updatedatabanner(id, update, array);
     }
 
-    function updatedatabanner(id, data) {
+    function updatedatabanner(id, datastring, datajson) {
         const formData = {
             id: id,
-            contents: data
+            contents: datastring,
+            data: datajson
         }
         fetch('/updatebannerjs', {
             method: 'POST',
